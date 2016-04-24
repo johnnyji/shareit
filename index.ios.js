@@ -1,30 +1,23 @@
 import React, {
   AppRegistry,
   Component,
-  NavigatorIOS,
-  StyleSheet,
-  Text,
   View
 } from 'react-native';
-import Home from './src/components/views/Home.js';
+import {Provider} from 'react-redux';
+import Root from './src/containers/Root';
+import store from './src/store/index';
 
-class Router extends Component {
+class App extends Component {
+  
+  static displayName = 'App';
+
   render() {
     return (
-      <NavigatorIOS
-        initialRoute={{
-          title: "ShareIt",
-          component: Home
-        }}
-        style={styles.navigator} />
+      <Provider store={store}>
+        <Root />
+      </Provider>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  navigator: {
-    flex: 1
-  }
-});
-
-AppRegistry.registerComponent('shareit', () => Router);
+AppRegistry.registerComponent('shareit', () => App);
