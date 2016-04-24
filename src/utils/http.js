@@ -1,3 +1,5 @@
+import camelCaseObject from 'camelcase-object';
+
 const buildHeaders = () => {
   return {
     'Accept': 'application/json',
@@ -5,7 +7,7 @@ const buildHeaders = () => {
   };
 };
 
-export default {
+const http = {
 
   delete(path) {
     return new Promise((resolve, reject) => {
@@ -19,7 +21,9 @@ export default {
           // Parse and return the JSON representation
           response.json()
             .then((json) => {
-              if (status >= 200 && status < 300) return resolve(json);
+              if (status >= 200 && status < 300) {
+                return resolve(camelCaseObject(json));
+              }
               reject(json);
             })
             .catch(reject);
@@ -39,7 +43,9 @@ export default {
           // Parse and return the JSON representation
           response.json()
             .then((json) => {
-              if (status >= 200 && status < 300) return resolve(json);
+              if (status >= 200 && status < 300) {
+                return resolve(camelCaseObject(json));
+              }
               reject(json);
             })
             .catch(reject);
@@ -73,13 +79,21 @@ export default {
           // Parse and return the JSON representation
           response.json()
             .then((json) => {
-              if (status >= 200 && status < 300) return resolve(json);
+              if (status >= 200 && status < 300) {
+                return resolve(camelCaseObject(json));
+              }
               reject(json);
             })
             .catch(reject);
         })
         .catch(reject);
     });
+  },
+
+  toJson(response) {
+    return response.json();
   }
 
 };
+
+export default http;

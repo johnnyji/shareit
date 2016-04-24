@@ -7,14 +7,10 @@ import React, {
   TouchableOpacity,
   View
 } from 'react-native';
-import http from '../../utils/http';
-import config from '../../../config';
-import AuthActionCreators from '../../actions/AuthActionCreators';
+import {getParameterByName} from '../../utils/http';
+import {instagram} from '../../../config';
+import {loginWithInstagram} from '../../actions/AuthActionCreators';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-
-const {instagram} = config;
-const {getParameterByName} = http;
-const {loginWithInstagram} = AuthActionCreators;
 
 const styles = StyleSheet.create({
   container: {

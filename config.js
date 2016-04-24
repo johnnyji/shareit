@@ -1,6 +1,6 @@
 const config = {
   api: {
-    path: 'http:/localhost:4000'
+    path: 'http:/localhost:4000/api/v1'
   },
   instagram: {
     api: {

@@ -1,10 +1,8 @@
-import AuthActionTypes from '../action_types/AuthActionTypes';
-import Immutable from 'immutable';
-
-const {
+import {
   LOGIN_WITH_INSTAGRAM,
   LOGIN_WITH_INSTAGRAM_SUCCESS
-} = AuthActionTypes;
+} from '../action_types/AuthActionTypes';
+import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
   authenticating: false,

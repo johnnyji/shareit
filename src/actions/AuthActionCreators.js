@@ -1,11 +1,12 @@
-import config from '../../config';
-
-const {instagram} = config;
+import {api, instagram} from '../../config';
+import {toJson, post} from '../utils/http';
+import camelCaseObject from 'camelcase-object';
+import curry from 'lodash/curry';
 
 const AuthActionCreators = {
 
   loginWithInstagram(code) {
-    return () => {
+    return (dispatch) => {
       // NOTE: We must make our POST request data through the body
       // instead of using URL params, this is the only way to get
       // the Instagram API to recognize our data
@@ -17,6 +18,9 @@ const AuthActionCreators = {
       formData.append('grant_type', 'authorization_code');
       formData.append('redirect_uri', instagram.redirectUri);
       formData.append('code', code);
+      // Creates a curried http.post that only requires the post data to
+      // send a request
+      const saveSessionToServer = curry(post)(`${api.path}/session/instagram`);
 
       fetch(`${instagram.api.path}/oauth/access_token/`, {
         method: 'POST',
@@ -26,12 +30,14 @@ const AuthActionCreators = {
         },
         body: formData
       })
-        .then((response) => response.json())
+        .then(toJson)
+        .then(camelCaseObject)
+        .then(saveSessionToServer)
         .then((response) => {
-          // TODO: Store `access_token` in the server session
-          // and store the current user
+          // When the user session has successfully been saved on the server
         })
         .catch((response) => {
+          debugger;
           // TODO: Show popup "Unable to authenticate" and
           // redirect to login screen
         });
