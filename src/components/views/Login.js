@@ -7,13 +7,14 @@ import React, {
   TouchableOpacity,
   View
 } from 'react-native';
+import {connect} from 'react-redux';
 import {getParameterByName} from '../../utils/http';
 import {instagram} from '../../../config';
 import {loginWithInstagram} from '../../actions/AuthActionCreators';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const styles = StyleSheet.create({
-  container: {
+  center: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center'
@@ -31,14 +32,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#00D392',
     padding: 12
   },
-  loginButtonText: {
+  whiteText: {
     color: '#FFF'
   }
 });
 
+@connect((state) => ({
+  authenticating: state.auth.get('authenticating')
+}))
 export default class Login extends Component {
 
   static displayName = 'Login';
+
+  static propTypes = {
+    authenticating: PropTypes.bool.isRequired
+  };
 
   static contextTypes = {
     dispatch: PropTypes.func.isRequired
@@ -53,23 +61,36 @@ export default class Login extends Component {
   }
 
   render() {
-    debugger;
     return (
-      <View style={styles.container}>
-        <View style={styles.container}>
+      <View style={styles.center}>
+        <View style={styles.center}>
           <Text style={styles.title}>ShareIt</Text>
           <Text style={styles.description}>
             Get rewarded for posting on Instagram!
           </Text>
         </View>
-        <View style={styles.container}>
-          <TouchableOpacity
-            onPress={this._handleInstagramLoginPress}
-            style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Instagram Login</Text>
-          </TouchableOpacity>
+        <View style={styles.center}>
+          {this._renderLoginButton()}
         </View>
       </View>
+    );
+  }
+
+  _renderLoginButton = () => {
+    if (this.props.authenticating) {
+      return (
+        <Text style={styles.center}>
+          One moment please...
+        </Text>
+      );
+    }
+
+    return (
+      <TouchableOpacity
+        onPress={this._handleInstagramLoginPress}
+        style={styles.loginButton}>
+        <Text style={styles.whiteText}>Instagram Login</Text>
+      </TouchableOpacity>
     );
   }
 

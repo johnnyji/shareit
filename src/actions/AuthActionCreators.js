@@ -1,5 +1,9 @@
+import {
+  LOGIN_WITH_INSTAGRAM_FAILURE
+} from '../action_types/AuthActionTypes';
 import {api, instagram} from '../../config';
 import {toJson, post} from '../utils/http';
+import {setAlert} from '../actions/AppActionCreators';
 import camelCaseObject from 'camelcase-object';
 import curry from 'lodash/curry';
 
@@ -36,11 +40,21 @@ const AuthActionCreators = {
         .then((response) => {
           // When the user session has successfully been saved on the server
         })
-        .catch((response) => {
-          debugger;
+        .catch((error) => {
+          dispatch(setAlert({
+            title: 'Unable to login',
+            message: error.message
+          }));
+          dispatch(AuthActionCreators.loginWithInstagramFailure());
           // TODO: Show popup "Unable to authenticate" and
           // redirect to login screen
         });
+    };
+  },
+
+  loginWithInstagramFailure() {
+    return {
+      type: LOGIN_WITH_INSTAGRAM_FAILURE
     };
   }
 

@@ -1,4 +1,5 @@
 import React, {
+  Alert,
   Component,
   PropTypes
 } from 'react-native';
@@ -8,12 +9,19 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Loading from '../components/views/Loading';
 import Login from '../components/views/Login';
 
-class Root extends Component {
+@connect((state) => ({
+  alert: state.app.get('alert'),
+  currentUser: state.auth.get('currentUser')
+}))
+export default class Root extends Component {
 
   static displayName = 'Root';
 
   static propTypes = {
-    authenticating: PropTypes.bool.isRequired,
+    alert: ImmutablePropTypes.mapContains({
+      title: PropTypes.string,
+      message: PropTypes.string
+    }).isRequired,
     currentUser: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired
   };
@@ -27,16 +35,20 @@ class Root extends Component {
       dispatch: this.props.dispatch
     };
   }
-  
+
+  componentDidUpdate() {
+    const {alert} = this.props;
+    const alertTitle = alert.get('title');
+    const alertMessage = alert.get('message');
+    
+    if (alertTitle && alertMessage) {
+      Alert.alert(alertTitle, alertMessage);
+    }
+  }
+
   render() {
-    if (this.props.authenticating) return <Loading />;
     if (!this.props.currentUser) return <Login />;
     return <Home />;
   }
 
 }
-
-export default connect((state) => ({
-  authenticating: state.auth.get('authenticating'),
-  currentUser: state.auth.get('currentUser')
-}))(Root);
