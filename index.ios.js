@@ -1,8 +1,5 @@
-import React, {
-  AppRegistry,
-  Component,
-  View
-} from 'react-native';
+import React, {Component} from 'react';
+import {AppRegistry} from 'react-native';
 import {Provider} from 'react-redux';
 import Root from './src/containers/Root';
 import store from './src/store/index';

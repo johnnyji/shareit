@@ -91,13 +91,6 @@ export default class Login extends Component {
   }
 
   _handleInstagramLoginPress = () => {
-    const URI = 
-      `${instagram.api.path}/oauth/authorize/` +
-      `?client_id=${instagram.clientId}` +
-      `&redirect_uri=${instagram.redirectUri}` +
-      `&response_type=code`;
-    console.log(URI);
-
     Linking.openURL(
       `${instagram.api.path}/oauth/authorize/` +
       `?client_id=${instagram.clientId}` +
