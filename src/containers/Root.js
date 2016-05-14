@@ -1,12 +1,8 @@
-import React, {
-  Alert,
-  Component,
-  PropTypes
-} from 'react-native';
+import React, {Component, PropTypes} from 'react';
+import {Alert} from 'react-native';
 import {connect} from 'react-redux';
 import Home from '../components/views/Home';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Loading from '../components/views/Loading';
 import Login from '../components/views/Login';
 
 @connect((state) => ({
@@ -41,7 +37,9 @@ export default class Root extends Component {
     const alertTitle = alert.get('title');
     const alertMessage = alert.get('message');
     
+		// If there's an alert message, pop it up in the view
     if (alertTitle && alertMessage) {
+      console.log('ALERT: ', alertMessage);
       Alert.alert(alertTitle, alertMessage);
     }
   }

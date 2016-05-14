@@ -1,11 +1,9 @@
-import React, {
-  Component,
-  PropTypes,
+import React, {Component} from 'react';
+import {
   StyleSheet,
   Text,
   View
 } from 'react-native';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const styles = StyleSheet.create({
   container: {

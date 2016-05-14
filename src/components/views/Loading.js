@@ -1,8 +1,5 @@
-import React, {
-  ActivityIndicatorIOS,
-  Component,
-  PropTypes
-} from 'react-native';
+import React, {Component} from 'react';
+import {ActivityIndicatorIOS} from 'react-native';
 
 export default class Loading extends Component {
 

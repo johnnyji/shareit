@@ -4,25 +4,29 @@
   "private": true,
   "scripts": {
     "clean": "watchman watch-del-all",
+    "eslint": "eslint ./src",
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
     "camelcase-object": "^1.0.0",
     "immutable": "^3.8.1",
-    "lodash": "^4.11.1",
-    "react": "^0.14.8",
-    "react-native": "^0.24.1",
+    "lodash": "^4.12.0",
+    "react": "^0.14.5",
+    "react-native": "^0.25.1",
     "react-redux": "^4.4.5",
-    "redux": "^3.5.1",
-    "redux-thunk": "^2.0.1"
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
-    "babel-plugin-add-module-exports": "^0.1.2",
+    "babel-eslint": "^6.0.4",
+    "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-react-native": "^1.5.7",
+    "babel-preset-react-native": "^1.8.0",
     "babel-preset-stage-0": "^6.5.0",
-    "eslint": "^2.8.0",
-    "eslint-config-johnnyji": "0.0.3",
+    "eslint": "^2.10.1",
+    "eslint-config-johnnyji": "0.1.2",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^5.1.1",
     "react-immutable-proptypes": "^1.7.1",
     "redux-logger": "^2.6.1"
   }

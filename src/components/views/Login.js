@@ -1,7 +1,6 @@
-import React, {
-  Component,
+import React, {Component, PropTypes} from 'react';
+import {
   Linking,
-  PropTypes,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,7 +10,7 @@ import {connect} from 'react-redux';
 import {getParameterByName} from '../../utils/http';
 import {instagram} from '../../../config';
 import {loginWithInstagram} from '../../actions/AuthActionCreators';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import {setAlert} from '../../actions/AppActionCreators';
 
 const styles = StyleSheet.create({
   center: {
@@ -45,10 +44,7 @@ export default class Login extends Component {
   static displayName = 'Login';
 
   static propTypes = {
-    authenticating: PropTypes.bool.isRequired
-  };
-
-  static contextTypes = {
+    authenticating: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -95,14 +91,26 @@ export default class Login extends Component {
   }
 
   _handleInstagramLoginPress = () => {
+    const URI = 
+      `${instagram.api.path}/oauth/authorize/` +
+      `?client_id=${instagram.clientId}` +
+      `&redirect_uri=${instagram.redirectUri}` +
+      `&response_type=code`;
+    console.log(URI);
+
     Linking.openURL(
       `${instagram.api.path}/oauth/authorize/` +
       `?client_id=${instagram.clientId}` +
       `&redirect_uri=${instagram.redirectUri}` +
       `&response_type=code`
-    ).catch((err) => {
-      // TODO: Add iOS alert
-      debugger;
+    ).catch(() => {
+      if (__DEV__) {
+        console.log('Auth failed alert hit');
+      }
+      this.props.dispatch(setAlert({
+        title: 'Oops, Authentication Error',
+        message: 'Unable to connect to Instagram'
+      }));
     });
   }
 
@@ -111,8 +119,15 @@ export default class Login extends Component {
     const errorReason = getParameterByName(event.url, 'error_reason');
     const code = getParameterByName(event.url, 'code');
 
-    if (code) this.context.dispatch(loginWithInstagram(code));
-    // TODO: Handle error case
+    if (code) this.props.dispatch(loginWithInstagram(code));
+
+    // Alerts the user of a login failure
+    if (error && errorReason) {
+      this.props.dispatch(setAlert({
+        title: 'Unable to Login',
+        message: errorReason
+      }));
+    }
   }
 
 }
