@@ -1,9 +1,9 @@
-const AuthActionTypes = {
+import createConstants from './utils/createConstants';
 
-  LOGIN_WITH_INSTAGRAM: 'LOGIN_WITH_INSTAGRAM',
-  LOGIN_WITH_INSTAGRAM_SUCCESS: 'LOGIN_WITH_INSTAGRAM_SUCCESS',
-  LOGIN_WITH_INSTAGRAM_FAILURE: 'LOGIN_WITH_INSTAGRAM_FAILURE'
-
-};
+const AuthActionTypes = createConstants([
+  'AUTHENTICATE',
+  'AUTHENTICATE_ERROR',
+  'AUTHENTICATE_SUCCESS',
+]);
 
 export default AuthActionTypes;

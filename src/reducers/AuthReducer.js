@@ -1,7 +1,7 @@
 import {
-  LOGIN_WITH_INSTAGRAM,
-  LOGIN_WITH_INSTAGRAM_FAILURE,
-  LOGIN_WITH_INSTAGRAM_SUCCESS
+  AUTHENTICATE,
+  AUTHENTICATE_ERROR,
+  AUTHENTICATE_SUCCESS
 } from '../action_types/AuthActionTypes';
 import Immutable from 'immutable';
 
@@ -13,17 +13,28 @@ const initialState = Immutable.fromJS({
 
 export default function AuthReducer(state = initialState, action) {
   switch (action.type) {
-    case LOGIN_WITH_INSTAGRAM: {
+
+    case AUTHENTICATE: {
       return state.set('authenticating', true);
     }
-    case LOGIN_WITH_INSTAGRAM_FAILURE: {
-      return state.merge({authenticating: false});
+
+    case AUTHENTICATE_ERROR: {
+      return state.merge({
+        authenticating: false,
+        authenticationError: action.data.errorMessage
+      });
     }
-    case LOGIN_WITH_INSTAGRAM_SUCCESS: {
-      return state;
+
+    case AUTHENTICATE_SUCCESS: {
+      return state.merge({
+        authenticating: false,
+        currentUser: action.data.user
+      });
     }
+
     default: {
       return state;
     }
+
   }
 }
