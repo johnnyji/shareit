@@ -52,12 +52,9 @@ export default class Root extends Component {
 
   constructor(props) {
     super(props);
-
-    const socketOptions = {
-      transports: ['websockets'],
-      forceNew: true
-    };
+    const socketOptions = {transports: ['websockets'], forceNew: true};
     const socket = io(config.api.path, socketOptions);
+    debugger;
 
     // Initiates the Feathers client
     this.app = feathers()
@@ -68,9 +65,6 @@ export default class Root extends Component {
       .configure(feathersAuthentication({
         storage: AsyncStorage
       }));
-
-    this.app.io.on('connect', this._handleConnection);
-    this.app.io.on('disconnect', this._handleDisconnect);
   }
 
   getChildContext() {
@@ -80,15 +74,10 @@ export default class Root extends Component {
     };
   }
 
-  componentWillMount () {
-    debugger;
+  componentDidMount () {
+    this.app.io.on('connect', this._handleConnection);
+    this.app.io.on('disconnect', this._handleDisconnect);
   }
-
-  // componentWillReceiveProps (nextProps) {
-  //   if (!this.props.currentUser && nextProps.currentUser) {
-  //     // Actions.dashboard();
-  //   }
-  // }
 
   componentDidUpdate() {
     const {alert} = this.props;
@@ -127,6 +116,7 @@ export default class Root extends Component {
    */
   _handleConnection = () => {
     const {dispatch} = this.props;
+    debugger;
 
     // Notify the connection to the store
     dispatch(onConnect());

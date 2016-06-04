@@ -34,9 +34,3 @@ node_modules/
 npm-debug.log
 config/dev.js
 config/prod.js
-
-# BUCK
-buck-out/
-\.buckd/
-android/app/libs
-android/keystores/debug.keystore
