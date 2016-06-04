@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from 'react';
-import {Alert, AsyncStorage, Text, View} from 'react-native';
+import {Alert, AsyncStorage} from 'react-native';
 import {Router, Scene} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-import {onConnect, onDisconnect} from '../actions/AppActionCreators';
+import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
+import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
 import config from '../../config/dev'; // TODO: Change to production config
 import feathers from 'feathers/client';
 import feathersAuthentication from 'feathers-authentication/client';
@@ -11,6 +12,7 @@ import hooks from 'feathers-hooks';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 // Views
+import FullPageSpinner from '../components/views/FullPageSpinner';
 import Home from '../components/views/Home';
 import Login from '../components/views/Login';
 import Offline from '../components/views/Offline';
@@ -51,7 +53,6 @@ export default class Root extends Component {
   constructor(props) {
     super(props);
 
-    // TODO: Change for production
     const socketOptions = {
       transports: ['websockets'],
       forceNew: true
@@ -68,8 +69,8 @@ export default class Root extends Component {
         storage: AsyncStorage
       }));
 
-    this.app.on('connect', this._handleConnection);
-    this.app.on('disconnect', this._handleDisconnect);
+    this.app.io.on('connect', this._handleConnection);
+    this.app.io.on('disconnect', this._handleDisconnect);
   }
 
   getChildContext() {
@@ -77,6 +78,10 @@ export default class Root extends Component {
       app: this.app,
       dispatch: this.props.dispatch
     };
+  }
+
+  componentWillMount () {
+    debugger;
   }
 
   // componentWillReceiveProps (nextProps) {
@@ -104,10 +109,7 @@ export default class Root extends Component {
       loading
     } = this.props;
 
-    if (loading) {
-      // TODO: Replace with Loading component
-      return <View><Text>Loading...</Text></View>;
-    }
+    if (loading) return <FullPageSpinner />;
 
     return (
       <Router>

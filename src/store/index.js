@@ -17,13 +17,11 @@ const transformToJs = (state) => {
 };
 
 const loggerMiddleware = createLogger({
-  level: 'info',
-  collapsed: true,
   stateTransformer: transformToJs
 });
 
 const createStoreWithMiddleware = window.__DEV__
-  ? applyMiddleware(thunkMiddleware)(createStore)
-  : applyMiddleware(thunkMiddleware, loggerMiddleware)(createStore);
+  ? applyMiddleware(thunkMiddleware, loggerMiddleware)(createStore)
+  : applyMiddleware(thunkMiddleware)(createStore);
 
 export default createStoreWithMiddleware(reducers);
