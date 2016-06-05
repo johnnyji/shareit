@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react-native';
 import {Provider} from 'react-redux';
 import Root from './containers/Root';
 import store from './store/index';

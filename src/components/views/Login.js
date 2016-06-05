@@ -1,6 +1,6 @@
-import React, {Component, PropTypes} from 'react';
-import {
-  Linking,
+import React, {
+  Component,
+  PropTypes,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -48,13 +48,13 @@ export default class Login extends Component {
     dispatch: PropTypes.func.isRequired
   };
 
-  componentDidMount() {
-    Linking.addEventListener('url', this._handleUrl);
-  }
+  // componentDidMount() {
+  //   Linking.addEventListener('url', this._handleUrl);
+  // }
 
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleUrl);
-  }
+  // componentWillUnmount() {
+  //   Linking.removeEventListener('url', this._handleUrl);
+  // }
 
   render() {
     return (
@@ -82,7 +82,7 @@ export default class Login extends Component {
         <Text style={styles.whiteText}>Login with Facebook</Text>
       </TouchableOpacity>
     );
-  }
+  };
 
   _handleFacebookLogin = () => {
   };

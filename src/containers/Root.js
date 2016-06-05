@@ -1,21 +1,17 @@
-import React, {Component, PropTypes} from 'react';
-import {Alert, AsyncStorage} from 'react-native';
-import {Router, Scene} from 'react-native-router-flux';
+import React, {AsyncStorage, PropTypes} from 'react-native';
+import {Actions, Router, Route} from 'react-native-router-flux';
+import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
-import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
-import config from '../../config/dev'; // TODO: Change to production config
-import feathers from 'feathers/client';
-import feathersAuthentication from 'feathers-authentication/client';
-import feathersSocketIo from 'feathers-socketio/client';
-import hooks from 'feathers-hooks';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-
-// Views
+import Login from '../components/views/Login';
 import FullPageSpinner from '../components/views/FullPageSpinner';
 import Home from '../components/views/Home';
-import Login from '../components/views/Login';
 import Offline from '../components/views/Offline';
+import authentication from 'feathers-authentication/client';
+import feathers from 'feathers/client';
+import hooks from 'feathers-hooks';
+import socketio from 'feathers-socketio/client';
 
 // This is required for socket.io-client due to a bug in React Native debugger
 if (window.navigator && Object.keys(window.navigator).length === 0) {
@@ -23,6 +19,8 @@ if (window.navigator && Object.keys(window.navigator).length === 0) {
 }
 
 const io = require('socket.io-client/socket.io');
+const API_PATH = 'http://localhost:3030';
+
 
 @connect((state) => ({
   alert: state.app.get('alert'),
@@ -30,7 +28,7 @@ const io = require('socket.io-client/socket.io');
   isConnected: state.app.get('isConnected'),
   loading: state.app.get('loading')
 }))
-export default class Root extends Component {
+export default class Root extends React.Component {
 
   static displayName = 'Root';
 
@@ -39,56 +37,31 @@ export default class Root extends Component {
       title: PropTypes.string,
       message: PropTypes.string
     }).isRequired,
+    app: PropTypes.any,
     currentUser: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
     isConnected: PropTypes.bool.isRequired,
     loading: PropTypes.bool.isRequired
   };
 
-  static childContextTypes = {
-    app: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired
-  };
 
   constructor(props) {
     super(props);
-    const socketOptions = {transports: ['websockets'], forceNew: true};
-    const socket = io(config.api.path, socketOptions);
-    debugger;
+    const options = {transports: ['websocket'], forceNew: true};
+    const socket = io(API_PATH, options);
 
-    // Initiates the Feathers client
     this.app = feathers()
-      // Configures web sockets for Feathers
-      .configure(feathersSocketIo(socket))
+      .configure(socketio(socket))
       .configure(hooks())
-      // Uses AsyncStorage to store the JWT auth token
-      .configure(feathersAuthentication({
+      // Use AsyncStorage to store our login toke
+      .configure(authentication({
         storage: AsyncStorage
       }));
   }
 
-  getChildContext() {
-    return {
-      app: this.app,
-      dispatch: this.props.dispatch
-    };
-  }
-
-  componentDidMount () {
-    this.app.io.on('connect', this._handleConnection);
+  componentDidMount() {
+    this.app.io.on('connect', this._handleConnect);
     this.app.io.on('disconnect', this._handleDisconnect);
-  }
-
-  componentDidUpdate() {
-    const {alert} = this.props;
-    const alertTitle = alert.get('title');
-    const alertMessage = alert.get('message');
-    
-		// If there's an alert message, pop it up in the view
-    if (alertTitle && alertMessage) {
-      console.log('ALERT: ', alertMessage);
-      Alert.alert(alertTitle, alertMessage);
-    }
   }
 
   render() {
@@ -101,22 +74,27 @@ export default class Root extends Component {
     if (loading) return <FullPageSpinner />;
 
     return (
-      <Router>
-        <Scene key="root">
-          <Scene key="Offline" component={Offline} title="Offline" initial={!clientIsConnected} />
-          <Scene key="Login" component={Login} title="Login" initial={clientIsConnected && !currentUser} />
-          <Scene key="Home" component={Home} title="Home" initial={clientIsConnected && currentUser} />
-        </Scene>
+      <Router hideNavBar={true}>
+        <Route
+          component={Offline}
+          hideNavBar={true}
+          initial={!clientIsConnected}
+          name='Offline'
+          title='Offline' />
+        <Route
+          component={Login}
+          hideNavBar={true}
+          initial={clientIsConnected && !currentUser}
+          name='Login'
+          title='Login' />
+        <Route name='Home' component={Home} title='Home' initial={clientIsConnected && currentUser} />
       </Router>
     );
   }
 
-  /**
-   * When the socket connects, we attempt to authenticate the user
-   */
-  _handleConnection = () => {
+
+  _handleConnect = () => {
     const {dispatch} = this.props;
-    debugger;
 
     // Notify the connection to the store
     dispatch(onConnect());
@@ -124,6 +102,7 @@ export default class Root extends Component {
     // Authenticate the user
     this.app.authenticate()
       .then((user) => {
+        debugger;
         dispatch(setLoading(false));
         dispatch(authenticateSuccess(user));
       })
@@ -133,14 +112,10 @@ export default class Root extends Component {
       });
   };
 
-  /**
-   * Handles the socket disconnecting
-   */
   _handleDisconnect = () => {
     const {dispatch} = this.props;
 
     // Notify the store of the socket disconnection
     dispatch(onDisconnect());
   };
-
 }
