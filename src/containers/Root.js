@@ -87,7 +87,12 @@ export default class Root extends React.Component {
           initial={clientIsConnected && !currentUser}
           name='Login'
           title='Login' />
-        <Route name='Home' component={Home} title='Home' initial={clientIsConnected && currentUser} />
+        <Route
+          component={Home}
+          hideNavBar={true}
+          initial={clientIsConnected && currentUser}
+          name='Home'
+          title='Home' />
       </Router>
     );
   }
@@ -102,7 +107,6 @@ export default class Root extends React.Component {
     // Authenticate the user
     this.app.authenticate()
       .then((user) => {
-        debugger;
         dispatch(setLoading(false));
         dispatch(authenticateSuccess(user));
       })

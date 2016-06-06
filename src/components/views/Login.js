@@ -1,12 +1,15 @@
 import React, {
   Component,
+  Linking,
   PropTypes,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
+  WebView
 } from 'react-native';
 import {connect} from 'react-redux';
+// import config from '../../../config/dev';
 // import {getParameterByName} from '../../utils/http';
 // import {instagram} from '../../../config';
 // import {loginWithInstagram} from '../../actions/AuthActionCreators';
@@ -36,6 +39,8 @@ const styles = StyleSheet.create({
   }
 });
 
+const AUTH_URL = 'http://localhost:3030/auth/facebook';
+
 @connect((state) => ({
   authenticating: state.auth.get('authenticating')
 }))
@@ -48,13 +53,13 @@ export default class Login extends Component {
     dispatch: PropTypes.func.isRequired
   };
 
-  // componentDidMount() {
-  //   Linking.addEventListener('url', this._handleUrl);
-  // }
+  componentDidMount() {
+    Linking.addEventListener('url', this._handleUrl);
+  }
 
-  // componentWillUnmount() {
-  //   Linking.removeEventListener('url', this._handleUrl);
-  // }
+  componentWillUnmount() {
+    Linking.removeEventListener('url', this._handleUrl);
+  }
 
   render() {
     return (
@@ -62,7 +67,7 @@ export default class Login extends Component {
         <View style={styles.center}>
           <Text style={styles.title}>ShareIt</Text>
           <Text style={styles.description}>
-            Get rewarded for posting on Instagram!
+            Find out whats going on near you!
           </Text>
         </View>
         <View style={styles.center}>
@@ -85,6 +90,14 @@ export default class Login extends Component {
   };
 
   _handleFacebookLogin = () => {
+    Linking.openURL(AUTH_URL)
+      .catch((err) => {
+        if (__DEV__) console.log('Auth Error: ', err);
+      });
+  };
+
+  _handleUrl = (event) => {
+    debugger;
   };
 
   // _handleInstagramLoginPress = () => {
