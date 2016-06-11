@@ -1,7 +1,9 @@
 import {
   AUTHENTICATE,
   AUTHENTICATE_ERROR,
-  AUTHENTICATE_SUCCESS
+  AUTHENTICATE_SUCCESS,
+  UPDATE_EMAIL,
+  UPDATE_PASSWORD
 } from '../action_types/AuthActionTypes';
 // import {api, instagram} from '../../config';
 // import {toJson, post} from '../utils/http';
@@ -28,6 +30,20 @@ const AuthActionCreators = {
     return {
       type: AUTHENTICATE_SUCCESS,
       data: {user}
+    };
+  },
+
+  updateEmail(email) {
+    return {
+      type: UPDATE_EMAIL,
+      data: {value: email, error: null}
+    };
+  },
+
+  updatePassword(password) {
+    return {
+      type: UPDATE_PASSWORD,
+      data: {value: password, error: null}
     };
   }
  //  loginWithInstagram(code) {

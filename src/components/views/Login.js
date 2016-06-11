@@ -1,14 +1,15 @@
 import React, {
   Component,
-  Linking,
   PropTypes,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  View,
-  WebView
+  View
 } from 'react-native';
+import AuthActionCreators from '../../actions/AuthActionCreators';
+import {center, stretch, fullWidth} from '../../styles/baseStyles';
 import {connect} from 'react-redux';
+import Button from '../ui/Button';
+import Input from '../ui/Input';
 // import config from '../../../config/dev';
 // import {getParameterByName} from '../../utils/http';
 // import {instagram} from '../../../config';
@@ -16,11 +17,6 @@ import {connect} from 'react-redux';
 // import {setAlert} from '../../actions/AppActionCreators';
 
 const styles = StyleSheet.create({
-  center: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center'
-  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -28,21 +24,17 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 14
-  },
-  loginButton: {
-    borderRadius: 10,
-    backgroundColor: '#00D392',
-    padding: 12
-  },
-  whiteText: {
-    color: '#FFF'
   }
 });
 
-const AUTH_URL = 'http://localhost:3030/auth/facebook';
+// const AUTH_URL = 'http://localhost:3030/auth/facebook';
 
 @connect((state) => ({
-  authenticating: state.auth.get('authenticating')
+  authenticating: state.auth.get('authenticating'),
+  email: state.auth.getIn(['form', 'email', 'value']),
+  emailError: state.auth.getIn(['form', 'email', 'error']),
+  password: state.auth.getIn(['form', 'password', 'value']),
+  passwordError: state.auth.getIn(['form', 'password', 'error'])
 }))
 export default class Login extends Component {
 
@@ -50,54 +42,74 @@ export default class Login extends Component {
 
   static propTypes = {
     authenticating: PropTypes.bool.isRequired,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
+    emailError: PropTypes.string,
+    password: PropTypes.string.isRequired,
+    passwordError: PropTypes.string
   };
 
-  componentDidMount() {
-    Linking.addEventListener('url', this._handleUrl);
-  }
+  // componentDidMount() {
+  //   Linking.addEventListener('url', this._handleUrl);
+  // }
 
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this._handleUrl);
-  }
+  // componentWillUnmount() {
+  //   Linking.removeEventListener('url', this._handleUrl);
+  // }
 
   render() {
+    
     return (
-      <View style={styles.center}>
-        <View style={styles.center}>
+      <View style={fullWidth}>
+
+        <View style={[center, {flex: 5}]}>
           <Text style={styles.title}>ShareIt</Text>
           <Text style={styles.description}>
             Find out whats going on near you!
           </Text>
         </View>
-        <View style={styles.center}>
-          {this._renderLoginButton()}
+
+        <View style={[center, stretch, {flex: 2}]}>
+          <Input
+            onUpdate={this._handleUpdateEmail}
+            placeholder='Email'
+            style={{flex: 5}}
+            value={this.props.email} />
+          <Input
+            onUpdate={this._handleUpdatePassword}
+            placeholder='Password'
+            style={{flex: 5}}
+            value={this.props.password} />
+          <Button
+            disabled={this.props.authenticating}
+            label={this.props.authenticating ? 'One Moment...' : 'Login / Register'}
+            onClick={this._handleClick}
+            style={{flex: 3}} />
         </View>
+
       </View>
     );
   }
 
-  _renderLoginButton = () => {
-    if (this.props.authenticating) return <Text>One moment please...</Text>;
-
-    return (
-      <TouchableOpacity
-        onPress={this._handleFacebookLogin}
-        style={styles.loginButton}>
-        <Text style={styles.whiteText}>Login with Facebook</Text>
-      </TouchableOpacity>
+  /**
+   * Handles clicking the login button and beginning
+   * the authentication process
+   */
+  _handleClick = () => {
+    this.props.dispatch(
+      AuthActionCreators.authenticate(
+        this.props.email,
+        this.props.password
+      )
     );
   };
-
-  _handleFacebookLogin = () => {
-    Linking.openURL(AUTH_URL)
-      .catch((err) => {
-        if (__DEV__) console.log('Auth Error: ', err);
-      });
+  
+  _handleUpdateEmail = (value) => {
+    this.props.dispatch(AuthActionCreators.updateEmail(value));
   };
 
-  _handleUrl = (event) => {
-    debugger;
+  _handleUpdatePassword = (value) => {
+    this.props.dispatch(AuthActionCreators.updatePassword(value));
   };
 
   // _handleInstagramLoginPress = () => {

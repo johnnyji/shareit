@@ -1,6 +1,11 @@
-import React, {AsyncStorage, PropTypes} from 'react-native';
+import React, {
+  AsyncStorage,
+  PropTypes,
+  View
+} from 'react-native';
 import {Actions, Router, Route} from 'react-native-router-flux';
 import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
+import baseStyles from '../styles/baseStyles';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -74,26 +79,28 @@ export default class Root extends React.Component {
     if (loading) return <FullPageSpinner />;
 
     return (
-      <Router hideNavBar={true}>
-        <Route
-          component={Offline}
-          hideNavBar={true}
-          initial={!clientIsConnected}
-          name='Offline'
-          title='Offline' />
-        <Route
-          component={Login}
-          hideNavBar={true}
-          initial={clientIsConnected && !currentUser}
-          name='Login'
-          title='Login' />
-        <Route
-          component={Home}
-          hideNavBar={true}
-          initial={clientIsConnected && currentUser}
-          name='Home'
-          title='Home' />
-      </Router>
+      <View style={baseStyles.fullWidth}>
+        <Router hideNavBar={true}>
+          <Route
+            component={Offline}
+            hideNavBar={true}
+            initial={!clientIsConnected}
+            name='Offline'
+            title='Offline' />
+          <Route
+            component={Login}
+            hideNavBar={true}
+            initial={clientIsConnected && !currentUser}
+            name='Login'
+            title='Login' />
+          <Route
+            component={Home}
+            hideNavBar={true}
+            initial={clientIsConnected && currentUser}
+            name='Home'
+            title='Home' />
+        </Router>
+      </View>
     );
   }
 
