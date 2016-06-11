@@ -10,6 +10,7 @@ import {center, stretch, fullWidth} from '../../styles/baseStyles';
 import {connect} from 'react-redux';
 import Button from '../ui/Button';
 import Input from '../ui/Input';
+import {primaryLighter} from '../../styles/ColorScheme';
 // import config from '../../../config/dev';
 // import {getParameterByName} from '../../utils/http';
 // import {instagram} from '../../../config';
@@ -73,7 +74,7 @@ export default class Login extends Component {
           <Input
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
-            style={{flex: 5}}
+            style={{backgroundColor: primaryLighter, flex: 5}}
             value={this.props.email} />
           <Input
             onUpdate={this._handleUpdatePassword}

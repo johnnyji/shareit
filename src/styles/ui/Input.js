@@ -3,9 +3,10 @@ import ColorScheme from '../ColorScheme';
 
 export default StyleSheet.create({
   main: {
-    backgroundColor: ColorScheme.white,
-    borderBottomColor: 'red',
+    backgroundColor: ColorScheme.primaryLight,
+    color: ColorScheme.white,
     height: 40,
-    flex: 1
+    flex: 1,
+    padding: 8
   }
 });

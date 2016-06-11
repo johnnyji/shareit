@@ -3,7 +3,7 @@ import ColorScheme from '../ColorScheme';
 
 export default StyleSheet.create({
   main: {
-    backgroundColor: ColorScheme.primaryLight,
+    backgroundColor: ColorScheme.primary,
     flexDirection: 'row',
     padding: 12
   },
