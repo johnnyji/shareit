@@ -3,7 +3,8 @@ import ColorScheme from '../ColorScheme';
 
 export default StyleSheet.create({
   main: {
-    backgroundColor: 'blue',
+    backgroundColor: ColorScheme.white,
+    borderBottomColor: 'red',
     height: 40,
     flex: 1
   }

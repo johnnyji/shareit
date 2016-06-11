@@ -82,7 +82,7 @@ export default class Login extends Component {
             value={this.props.password} />
           <Button
             disabled={this.props.authenticating}
-            label={this.props.authenticating ? 'One Moment...' : 'Login / Register'}
+            label={this.props.authenticating ? 'One moment...' : 'Login / Register'}
             onClick={this._handleClick}
             style={{flex: 3}} />
         </View>

@@ -1,7 +1,6 @@
 import React, {
   Component,
   PropTypes,
-  StyleSheet,
   Text,
   TouchableOpacity
 } from 'react-native';
@@ -19,7 +18,8 @@ export default class Button extends Component {
     fullWidth: PropTypes.bool.isRequired,
     label: PropTypes.string,
     onClick: PropTypes.func.isRequired,
-    style: PropTypes.instanceOf(StyleSheet)
+    style: PropTypes.object,
+    textStyle: PropTypes.object
   };
 
   static defaultProps = {
@@ -28,19 +28,24 @@ export default class Button extends Component {
   };
 
   render() {
-    const {fullWidth, label, style} = this.props;
+    const {disabled, fullWidth, label, style, textStyle} = this.props;
 
     return (
       <TouchableOpacity
-        accessible={false}
-        onPress={this._handlePress}
+        activeOpacity={disabled ? 1 : 0.7}
+        onPress={disabled ? null : this._handlePress}
         style={[
           buttonStyles.main,
           baseStyles.center,
           fullWidth && baseStyles.fullWidth,
+          disabled && buttonStyles.disabled,
           style && style
         ]}>
-        <Text style={buttonStyles.text}>{label}</Text>
+        <Text style={[
+          buttonStyles.text,
+          disabled && buttonStyles.disabledText,
+          textStyle && textStyle
+        ]}>{label}</Text>
       </TouchableOpacity>
     );
   }

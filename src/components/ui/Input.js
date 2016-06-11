@@ -1,7 +1,6 @@
 import React, {
   Component,
   PropTypes,
-  StyleSheet,
   TextInput
 } from 'react-native';
 import inputStyles from '../../styles/ui/Input';
@@ -18,7 +17,7 @@ export default class Input extends Component {
       PropTypes.string,
       PropTypes.node
     ]).isRequired,
-    style: PropTypes.instanceOf(StyleSheet),
+    style: PropTypes.object.isRequired,
     value: PropTypes.string.isRequired
   };
 
