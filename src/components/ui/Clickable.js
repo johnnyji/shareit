@@ -5,6 +5,7 @@ import React, {
   TouchableOpacity
 } from 'react-native';
 import baseStyles from '../../styles/baseStyles';
+import CustomPropTypes from '../utils/CustomPropTypes';
 import pureRender from 'pure-render-decorator';
 
 const styles = StyleSheet.create({
@@ -21,10 +22,10 @@ export default class Clickable extends Component {
   static propTypes = {
     disabled: PropTypes.bool.isRequired,
     onClick: PropTypes.func.isRequired,
-    style: PropTypes.object
+    style: CustomPropTypes.style
   };
 
-  static propTypes = {
+  static defaultProps = {
     disabled: false
   };
 

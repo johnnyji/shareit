@@ -7,6 +7,7 @@ import React, {
 } from 'react-native';
 import baseStyles from '../../styles/baseStyles';
 import ColorScheme from '../../styles/ColorScheme';
+import CustomPropTypes from '../utils/CustomPropTypes';
 import pureRender from 'pure-render-decorator';
 
 const styles = StyleSheet.create({
@@ -38,7 +39,7 @@ export default class Button extends Component {
     fullWidth: PropTypes.bool.isRequired,
     label: PropTypes.string,
     onClick: PropTypes.func.isRequired,
-    style: PropTypes.object,
+    style: CustomPropTypes.style,
     textStyle: PropTypes.object
   };
 

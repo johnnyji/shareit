@@ -6,6 +6,7 @@ import React, {
   View
 } from 'react-native';
 import ColorScheme from '../../styles/ColorScheme';
+import CustomPropTypes from '../utils/CustomPropTypes';
 import pureRender from 'pure-render-decorator';
 
 const styles = StyleSheet.create({
@@ -34,7 +35,7 @@ export default class Input extends Component {
       PropTypes.node
     ]).isRequired,
     placeholderTextColor: PropTypes.string.isRequired,
-    style: PropTypes.object,
+    style: CustomPropTypes.style,
     type: PropTypes.oneOf(['text', 'password']).isRequired,
     value: PropTypes.string.isRequired
   };
