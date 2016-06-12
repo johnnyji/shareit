@@ -5,12 +5,17 @@ import React, {
   Text,
   View
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import AuthActionCreators from '../../actions/AuthActionCreators';
+import baseStyles from '../../styles/baseStyles';
 import {center, stretch, fullWidth} from '../../styles/baseStyles';
 import {connect} from 'react-redux';
 import Button from '../ui/Button';
+import Clickable from '../ui/Clickable';
+import ColorScheme from '../../styles/ColorScheme';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Input from '../ui/Input';
-import {primaryLighter} from '../../styles/ColorScheme';
+import Toolbar from '../ui/Toolbar';
 // import config from '../../../config/dev';
 // import {getParameterByName} from '../../utils/http';
 // import {instagram} from '../../../config';
@@ -50,43 +55,48 @@ export default class Login extends Component {
     passwordError: PropTypes.string
   };
 
-  // componentDidMount() {
-  //   Linking.addEventListener('url', this._handleUrl);
-  // }
-
-  // componentWillUnmount() {
-  //   Linking.removeEventListener('url', this._handleUrl);
-  // }
+  static contextTypes = {
+    app: PropTypes.object.isRequired
+  };
 
   render() {
     
     return (
       <View style={fullWidth}>
 
-        <View style={[center, {flex: 5}]}>
-          <Text style={styles.title}>ShareIt</Text>
-          <Text style={styles.description}>
-            Find out whats going on near you!
-          </Text>
-        </View>
+        <Toolbar>
+          <Clickable
+            onClick={Actions.pop}
+            style={[baseStyles.center, {alignSelf: 'flex-start'}]}>
+            <Icon name='ios-arrow-back' />
+          </Clickable>
+          <Text>Login</Text>
+        </Toolbar>
 
-        <View style={[center, stretch, {flex: 2}]}>
+        <View style={[center, stretch, {flex: 1}]}>
           <Input
+            borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
-            style={{backgroundColor: primaryLighter, flex: 5}}
+            placeholderTextColor={ColorScheme.placeholder}
+            style={{
+              backgroundColor: ColorScheme.white,
+              color: ColorScheme.text
+            }}
             value={this.props.email} />
           <Input
+            borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdatePassword}
             placeholder='Password'
-            style={{flex: 5}}
+            placeholderTextColor={ColorScheme.placeholder}
+            type='password'
             value={this.props.password} />
           <Button
-            disabled={this.props.authenticating}
-            label={this.props.authenticating ? 'One moment...' : 'Login / Register'}
-            onClick={this._handleClick}
-            style={{flex: 3}} />
+            label='Login'
+            onClick={this._handleLogin} />
         </View>
+
+        <View style={[stretch, {flex: 3}]} />
 
       </View>
     );
@@ -96,13 +106,18 @@ export default class Login extends Component {
    * Handles clicking the login button and beginning
    * the authentication process
    */
-  _handleClick = () => {
-    this.props.dispatch(
-      AuthActionCreators.authenticate(
-        this.props.email,
-        this.props.password
-      )
-    );
+  _handleLogin = () => {
+    this.context.app.authenticate({
+      type: 'local',
+      email: this.props.email,
+      password: this.props.password
+    })
+      .then((result) => {
+        debugger;
+      })
+      .catch((err) => {
+        debugger;
+      });
   };
   
   _handleUpdateEmail = (value) => {

@@ -1,12 +1,32 @@
 import React, {
   Component,
   PropTypes,
+  StyleSheet,
   Text,
   TouchableOpacity
 } from 'react-native';
 import baseStyles from '../../styles/baseStyles';
-import buttonStyles from '../../styles/ui/Button';
+import ColorScheme from '../../styles/ColorScheme';
 import pureRender from 'pure-render-decorator';
+
+const styles = StyleSheet.create({
+  main: {
+    backgroundColor: ColorScheme.primary,
+    flexDirection: 'row',
+    padding: 12
+  },
+  disabled: {
+    backgroundColor: ColorScheme.disabled
+  },
+  disabledText: {
+    color: ColorScheme.disabledText
+  },
+  text: {
+    color: ColorScheme.white,
+    fontWeight: 'bold',
+    fontSize: 18
+  }
+});
 
 @pureRender
 export default class Button extends Component {
@@ -35,15 +55,15 @@ export default class Button extends Component {
         activeOpacity={disabled ? 1 : 0.7}
         onPress={disabled ? null : this._handlePress}
         style={[
-          buttonStyles.main,
+          styles.main,
           baseStyles.center,
           fullWidth && baseStyles.fullWidth,
-          disabled && buttonStyles.disabled,
+          disabled && styles.disabled,
           style && style
         ]}>
         <Text style={[
-          buttonStyles.text,
-          disabled && buttonStyles.disabledText,
+          styles.text,
+          disabled && styles.disabledText,
           textStyle && textStyle
         ]}>{label}</Text>
       </TouchableOpacity>

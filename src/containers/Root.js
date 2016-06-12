@@ -3,16 +3,18 @@ import React, {
   PropTypes,
   View
 } from 'react-native';
-import {Actions, Router, Route} from 'react-native-router-flux';
 import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
+import {Router, Route} from 'react-native-router-flux';
 import baseStyles from '../styles/baseStyles';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Landing from '../components/views/Landing';
 import Login from '../components/views/Login';
 import FullPageSpinner from '../components/views/FullPageSpinner';
 import Home from '../components/views/Home';
 import Offline from '../components/views/Offline';
+import Register from '../components/views/Register';
 import authentication from 'feathers-authentication/client';
 import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
@@ -49,6 +51,9 @@ export default class Root extends React.Component {
     loading: PropTypes.bool.isRequired
   };
 
+  static childContextTypes = {
+    app: PropTypes.object.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -62,6 +67,12 @@ export default class Root extends React.Component {
       .configure(authentication({
         storage: AsyncStorage
       }));
+  }
+
+  getChildContext() {
+    return {
+      app: this.app
+    };
   }
 
   componentDidMount() {
@@ -87,12 +98,24 @@ export default class Root extends React.Component {
             initial={!clientIsConnected}
             name='Offline'
             title='Offline' />
+
+          <Route
+            component={Landing}
+            hideNavBar={true}
+            initial={clientIsConnected && !currentUser}
+            name='Landing'
+            title='Landing' />
           <Route
             component={Login}
             hideNavBar={true}
-            initial={clientIsConnected && !currentUser}
             name='Login'
             title='Login' />
+          <Route
+            component={Register}
+            hideNavBar={true}
+            name='Register'
+            title='Register' />
+
           <Route
             component={Home}
             hideNavBar={true}
