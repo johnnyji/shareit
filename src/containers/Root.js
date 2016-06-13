@@ -3,22 +3,22 @@ import React, {
   PropTypes,
   View
 } from 'react-native';
-import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
-import {Router, Route} from 'react-native-router-flux';
-import baseStyles from '../styles/baseStyles';
-import {connect} from 'react-redux';
-import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
+import FullPageSpinner from '../components/ui/FullPageSpinner';
+import Home from '../components/views/Home';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Landing from '../components/views/Landing';
 import Login from '../components/views/Login';
-import FullPageSpinner from '../components/views/FullPageSpinner';
-import Home from '../components/views/Home';
 import Offline from '../components/views/Offline';
 import Register from '../components/views/Register';
 import authentication from 'feathers-authentication/client';
+import baseStyles from '../styles/baseStyles';
 import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
+import {Router, Route} from 'react-native-router-flux';
+import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
+import {connect} from 'react-redux';
+import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
 
 // This is required for socket.io-client due to a bug in React Native debugger
 if (window.navigator && Object.keys(window.navigator).length === 0) {
@@ -33,7 +33,7 @@ const API_PATH = 'http://localhost:3030';
   alert: state.app.get('alert'),
   currentUser: state.auth.get('currentUser'),
   isConnected: state.app.get('isConnected'),
-  loading: state.app.get('loading')
+  isLoading: state.app.get('isLoading')
 }))
 export default class Root extends React.Component {
 
@@ -48,7 +48,7 @@ export default class Root extends React.Component {
     currentUser: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
     isConnected: PropTypes.bool.isRequired,
-    loading: PropTypes.bool.isRequired
+    isLoading: PropTypes.bool.isRequired
   };
 
   static childContextTypes = {
@@ -84,10 +84,10 @@ export default class Root extends React.Component {
     const {
       currentUser,
       isConnected: clientIsConnected,
-      loading
+      isLoading
     } = this.props;
 
-    if (loading) return <FullPageSpinner />;
+    if (isLoading) return <FullPageSpinner />;
 
     return (
       <View style={baseStyles.fullWidth}>
@@ -131,7 +131,6 @@ export default class Root extends React.Component {
   _handleConnect = () => {
     const {dispatch} = this.props;
 
-    // Notify the connection to the store
     dispatch(onConnect());
 
     // Authenticate the user
@@ -147,9 +146,7 @@ export default class Root extends React.Component {
   };
 
   _handleDisconnect = () => {
-    const {dispatch} = this.props;
-
     // Notify the store of the socket disconnection
-    dispatch(onDisconnect());
+    this.props.dispatch(onDisconnect());
   };
 }

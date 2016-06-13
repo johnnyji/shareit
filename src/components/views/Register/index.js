@@ -3,12 +3,13 @@ import React, {
   PropTypes,
   View
 } from 'react-native';
-import AuthActionCreators from '../../actions/AuthActionCreators';
-import {fullWidth} from '../../styles/baseStyles';
+import AuthActionCreators from '../../../actions/AuthActionCreators';
+import {fullWidth} from '../../../styles/baseStyles';
 import {connect} from 'react-redux';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import {primaryLighter} from '../../styles/ColorScheme';
+import Button from '../../ui/Button';
+import Input from '../../ui/Input';
+import {primaryLighter} from '../../../styles/ColorScheme';
+import pureRender from 'pure-render-decorator';
 // import config from '../../../config/dev';
 // import {getParameterByName} from '../../utils/http';
 // import {instagram} from '../../../config';
@@ -22,6 +23,7 @@ import {primaryLighter} from '../../styles/ColorScheme';
   password: state.auth.getIn(['form', 'password', 'value']),
   passwordError: state.auth.getIn(['form', 'password', 'error'])
 }))
+@pureRender
 export default class Login extends Component {
 
   static displayName = 'Login';

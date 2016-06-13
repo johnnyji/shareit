@@ -4,14 +4,14 @@ import React, {
   Text,
   View
 } from 'react-native';
-import AuthActionCreators from '../../actions/AuthActionCreators';
-import baseStyles from '../../styles/baseStyles';
-import Button from '../ui/Button';
-import Clickable from '../ui/Clickable';
-import ColorScheme from '../../styles/ColorScheme';
+import AuthActionCreators from '../../../actions/AuthActionCreators';
+import baseStyles from '../../../styles/baseStyles';
+import Button from '../../ui/Button';
+import Clickable from '../../ui/Clickable';
+import ColorScheme from '../../../styles/ColorScheme';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Input from '../ui/Input';
-import Toolbar from '../ui/Toolbar';
+import Input from '../../ui/Input';
+import Toolbar from '../../ui/Toolbar';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 

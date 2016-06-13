@@ -12,7 +12,7 @@ const initialState = Immutable.fromJS({
     message: null
   },
   isConnected: false,
-  loading: true
+  isLoading: true
 });
 
 export default function AppReducer(state = initialState, action) {
@@ -23,7 +23,10 @@ export default function AppReducer(state = initialState, action) {
     }
 
     case ON_DISCONNECT: {
-      return state.set('isConnected', false);
+      return state.merge({
+        isConnected: false,
+        isLoading: false
+      });
     }
 
     case SET_ALERT: {
@@ -34,7 +37,7 @@ export default function AppReducer(state = initialState, action) {
     }
 
     case SET_LOADING: {
-      return state.set('loading', action.data.loading);
+      return state.set('isLoading', action.data.loading);
     }
 
     default: {

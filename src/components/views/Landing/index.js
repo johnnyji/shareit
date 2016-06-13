@@ -5,9 +5,9 @@ import React, {
   View
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {center, stretch, fullWidth} from '../../styles/baseStyles';
-import Button from '../ui/Button';
-import {primaryLight, primaryLighter} from '../../styles/ColorScheme';
+import {center, stretch, fullWidth} from '../../../styles/baseStyles';
+import Button from '../../ui/Button';
+import {primaryLight, primaryLighter} from '../../../styles/ColorScheme';
 
 const styles = StyleSheet.create({
   title: {
