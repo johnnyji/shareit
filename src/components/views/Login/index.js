@@ -1,19 +1,22 @@
 import React, {
   Component,
   PropTypes,
+  StyleSheet,
   Text,
   View
 } from 'react-native';
 import AuthActionCreators from '../../../actions/AuthActionCreators';
 import baseStyles from '../../../styles/baseStyles';
 import Button from '../../ui/Button';
-import Clickable from '../../ui/Clickable';
 import ColorScheme from '../../../styles/ColorScheme';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Input from '../../ui/Input';
+import StatusBarEscape from '../../ui/StatusBarEscape';
 import Toolbar from '../../ui/Toolbar';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
+
+const styles = StyleSheet.create({
+});
 
 @connect((state) => ({
   authenticating: state.auth.get('authenticating'),
@@ -43,42 +46,34 @@ export default class Login extends Component {
     
     return (
       <View style={baseStyles.fullWidth}>
-        <View style={baseStyles.escapeStatusBarIOS} />
+        <StatusBarEscape />
 
-        {/* TODO: Why is this having overflow? */}
-        <Toolbar>
-          <Clickable
-            onClick={Actions.pop}
-            style={[baseStyles.center, {alignSelf: 'flex-start'}]}>
-            <Icon name='ios-arrow-back' size={30} />
-          </Clickable>
-          <Text style={baseStyles.subheader}>Login</Text>
+        <Toolbar onBackNavClick={Actions.pop} style={styles.toolbar}>
+          <Text style={[baseStyles.subheader, baseStyles.centerText]}>Login</Text>
         </Toolbar>
 
-        <View style={[baseStyles.stretch, {flex: 1}]}>
+        <View style={[baseStyles.stretch, {flex: 8}]}>
           <Input
             borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
             placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 50}}
+            style={{height: 60}}
             value={this.props.email} />
           <Input
             borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdatePassword}
             placeholder='Password'
             placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 50}}
+            style={{height: 60}}
             type='password'
             value={this.props.password} />
         </View>
 
-        <View style={[baseStyles.stretch, {justifyContent: 'flex-end', flex: 3}]}>
-          <View style={{flex: 5}} />
-          <Button
-            label='Login'
-            onClick={this._handleLogin} />
-        </View>
+        <Button
+          label='Login'
+          onClick={this._handleLogin}
+          style={baseStyles.center} />
 
       </View>
     );

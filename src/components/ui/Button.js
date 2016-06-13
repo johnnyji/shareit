@@ -14,7 +14,10 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: ColorScheme.primary,
     flexDirection: 'row',
-    padding: 12
+    paddingBottom: 10,
+    paddingLeft: 12,
+    paddingTop: 10,
+    paddingRight: 12
   },
   disabled: {
     backgroundColor: ColorScheme.disabled

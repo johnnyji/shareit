@@ -6,11 +6,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  // This is used to avoid putting any content in the IOS status bar
-  // at the top of the phone
-  escapeStatusBarIOS: {
-    backgroundColor: 'transparent',
-    height: 20
+  centerText: {
+    textAlign: 'center'
   },
   fullWidth: {
     flex: 1
