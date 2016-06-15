@@ -19,17 +19,18 @@ const AuthActionCreators = {
     };
   },
   
-  authenticateError(errorMessage) {
+  authenticateError(error) {
+    debugger;
     return {
       type: AUTHENTICATE_ERROR,
-      data: {errorMessage}
+      data: {errorMessage: error}
     };
   },
 
-  authenticateSuccess(user) {
+  authenticateSuccess({data}) {
     return {
       type: AUTHENTICATE_SUCCESS,
-      data: {user}
+      data: {user: data}
     };
   },
 

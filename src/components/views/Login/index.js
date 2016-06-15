@@ -1,7 +1,6 @@
 import React, {
   Component,
   PropTypes,
-  StyleSheet,
   Text,
   View
 } from 'react-native';
@@ -9,28 +8,30 @@ import AuthActionCreators from '../../../actions/AuthActionCreators';
 import baseStyles from '../../../styles/baseStyles';
 import Button from '../../ui/Button';
 import ColorScheme from '../../../styles/ColorScheme';
+import CustomPropTypes from '../../utils/CustomPropTypes';
 import Input from '../../ui/Input';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 import Toolbar from '../../ui/Toolbar';
+import pureRender from 'pure-render-decorator';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 
-const styles = StyleSheet.create({
-});
-
 @connect((state) => ({
   authenticating: state.auth.get('authenticating'),
+  currentUser: state.auth.get('currentUser'),
   email: state.auth.getIn(['form', 'email', 'value']),
   emailError: state.auth.getIn(['form', 'email', 'error']),
   password: state.auth.getIn(['form', 'password', 'value']),
   passwordError: state.auth.getIn(['form', 'password', 'error'])
 }))
+@pureRender
 export default class Login extends Component {
 
   static displayName = 'Login';
 
   static propTypes = {
     authenticating: PropTypes.bool.isRequired,
+    currentUser: CustomPropTypes.user,
     dispatch: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     emailError: PropTypes.string,
@@ -42,13 +43,19 @@ export default class Login extends Component {
     app: PropTypes.object.isRequired
   };
 
+  componentWillUpdate(nextProps) {
+    if (!this.props.currentUser && nextProps.currentUser) {
+      Actions.Home();
+    }
+  }
+
   render() {
-    
+    console.log(this.props.currentUser); 
     return (
       <View style={baseStyles.fullWidth}>
         <StatusBarEscape />
 
-        <Toolbar onBackNavClick={Actions.pop} style={styles.toolbar}>
+        <Toolbar onBackNavClick={Actions.pop}>
           <Text style={[baseStyles.subheader, baseStyles.centerText]}>Login</Text>
         </Toolbar>
 
@@ -84,17 +91,16 @@ export default class Login extends Component {
    * the authentication process
    */
   _handleLogin = () => {
+    // TODO: Authentication is not working properly, correct password and email
+    // is getting invalid message
+    console.log(this.props.email, this.props.password);
     this.context.app.authenticate({
       type: 'local',
       email: this.props.email,
       password: this.props.password
     })
-      .then((result) => {
-        debugger;
-      })
-      .catch((err) => {
-        debugger;
-      });
+      .then(AuthActionCreators.authenticateSuccess)
+      .catch(AuthActionCreators.authenticateError);
   };
   
   _handleUpdateEmail = (value) => {

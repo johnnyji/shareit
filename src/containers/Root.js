@@ -57,8 +57,7 @@ export default class Root extends React.Component {
 
   constructor(props) {
     super(props);
-    const options = {transports: ['websocket'], forceNew: true};
-    const socket = io(API_PATH, options);
+    const socket = io(API_PATH, {transports: ['websocket']});
 
     this.app = feathers()
       .configure(socketio(socket))
