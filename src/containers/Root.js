@@ -3,6 +3,7 @@ import React, {
   PropTypes,
   View
 } from 'react-native';
+import AuthActionCreators from '../actions/AuthActionCreators';
 import FullPageSpinner from '../components/ui/FullPageSpinner';
 import Home from '../components/views/Home';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -16,7 +17,6 @@ import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
 import {Router, Route} from 'react-native-router-flux';
-import {authenticateError, authenticateSuccess} from '../actions/AuthActionCreators';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
 
@@ -32,6 +32,8 @@ const API_PATH = 'http://localhost:3030';
 @connect((state) => ({
   alert: state.app.get('alert'),
   currentUser: state.auth.get('currentUser'),
+  fetchingCurrentUser: state.auth.get('fetchingCurrentUser'),
+  fetchedCurrentUser: state.auth.get('fetchedCurrentUser'),
   isConnected: state.app.get('isConnected'),
   isLoading: state.app.get('isLoading')
 }))
@@ -47,6 +49,8 @@ export default class Root extends React.Component {
     app: PropTypes.any,
     currentUser: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
+    fetchingCurrentUser: PropTypes.bool.isRequired,
+    fetchedCurrentUser: PropTypes.bool.isRequired,
     isConnected: PropTypes.bool.isRequired,
     isLoading: PropTypes.bool.isRequired
   };
@@ -82,11 +86,14 @@ export default class Root extends React.Component {
   render() {
     const {
       currentUser,
+      fetchingCurrentUser,
+      fetchedCurrentUser,
       isConnected: clientIsConnected,
       isLoading
     } = this.props;
 
     if (isLoading) return <FullPageSpinner />;
+    if (fetchingCurrentUser || !fetchedCurrentUser) return <FullPageSpinner />;
 
     return (
       <View style={baseStyles.fullWidth}>
@@ -131,16 +138,17 @@ export default class Root extends React.Component {
     const {dispatch} = this.props;
 
     dispatch(onConnect());
+    dispatch(AuthActionCreators.authenticate());
 
     // Authenticate the user
     this.app.authenticate()
       .then((user) => {
+        dispatch(AuthActionCreators.authenticateSuccess(user));
         dispatch(setLoading(false));
-        dispatch(authenticateSuccess(user));
       })
       .catch((err) => {
+        dispatch(AuthActionCreators.authenticateError(err.message));
         dispatch(setLoading(false));
-        dispatch(authenticateError(err.message));
       });
   };
 

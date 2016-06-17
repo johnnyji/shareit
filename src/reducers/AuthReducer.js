@@ -11,6 +11,8 @@ const initialState = Immutable.fromJS({
   authenticating: false,
   authenticationError: null,
   currentUser: null,
+  fetchingCurrentUser: false,
+  fetchedCurrentUser: false,
   form: {
     email: {
       value: '',
@@ -27,20 +29,28 @@ export default function AuthReducer(state = initialState, action) {
   switch (action.type) {
 
     case AUTHENTICATE: {
-      return state.set('authenticating', true);
+      return state.merge({
+        authenticating: true,
+        fetchingCurrentUser: true,
+        fetchedCurrentUser: false
+      });
     }
 
     case AUTHENTICATE_ERROR: {
       return state.merge({
         authenticating: false,
-        authenticationError: action.data.errorMessage
+        authenticationError: action.data.errorMessage,
+        fetchingCurrentUser: false,
+        fetchedCurrentUser: false
       });
     }
 
     case AUTHENTICATE_SUCCESS: {
       return state.merge({
         authenticating: false,
-        currentUser: action.data.user
+        currentUser: action.data.user,
+        fetchingCurrentUser: false,
+        fetchedCurrentUser: true
       });
     }
 

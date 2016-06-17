@@ -44,13 +44,14 @@ export default class Login extends Component {
   };
 
   componentWillUpdate(nextProps) {
+    // componentWillUpdate doesn't fire even though the
+    // user is logged in
     if (!this.props.currentUser && nextProps.currentUser) {
       Actions.Home();
     }
   }
 
   render() {
-    console.log(this.props.currentUser); 
     return (
       <View style={baseStyles.fullWidth}>
         <StatusBarEscape />
@@ -91,16 +92,19 @@ export default class Login extends Component {
    * the authentication process
    */
   _handleLogin = () => {
-    // TODO: Authentication is not working properly, correct password and email
-    // is getting invalid message
-    console.log(this.props.email, this.props.password);
+    const {dispatch, email, password} = this.props;
+
     this.context.app.authenticate({
       type: 'local',
-      email: this.props.email,
-      password: this.props.password
+      email: email.toLowerCase(),
+      password: password
     })
-      .then(AuthActionCreators.authenticateSuccess)
-      .catch(AuthActionCreators.authenticateError);
+      .then((response) => {
+        dispatch(AuthActionCreators.authenticateSuccess(response));
+      })
+      .catch((err) => {
+        dispatch(AuthActionCreators.authenticateError(err.message));
+      });
   };
   
   _handleUpdateEmail = (value) => {

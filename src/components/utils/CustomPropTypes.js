@@ -1,8 +1,6 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import {PropTypes} from 'react-native';
 
-const STR = PropTypes.string
-
 export default {
 
   style: PropTypes.oneOfType([

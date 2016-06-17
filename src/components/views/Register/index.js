@@ -50,7 +50,7 @@ export default class Register extends Component {
 
   componentWillUpdate(nextProps) {
     if (!this.props.currentUser && nextProps.currentUser) {
-      Actions.Home();
+      Actions.Setup();
     }
   }
 
@@ -102,7 +102,7 @@ export default class Register extends Component {
   };
 
   _handleRegister = () => {
-    const {email, password} = this.props;
+    const {dispatch, email, password} = this.props;
 
     this.context.app
       .service('users')
@@ -111,8 +111,12 @@ export default class Register extends Component {
         password: password.toLowerCase()
       })
       .then(this._handleAuthenticate)
-      .then(AuthActionCreators.authenticateSuccess)
-      .catch(AuthActionCreators.authenticateError);
+      .then((response) => {
+        dispatch(AuthActionCreators.authenticateSuccess(response));
+      })
+      .catch((err) => {
+        dispatch(AuthActionCreators.authenticateError(err.message));
+      });
   };
 
   _handleUpdateEmail = (value) => {
