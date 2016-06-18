@@ -5,19 +5,19 @@ import React, {
   View
 } from 'react-native';
 import AuthActionCreators from '../actions/AuthActionCreators';
-import FullPageSpinner from '../components/ui/FullPageSpinner';
-import Home from '../components/views/Home';
+import FullPageSpinner from './ui/FullPageSpinner';
+import Home from './views/Home';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Landing from '../components/views/Landing';
-import Login from '../components/views/Login';
-import Offline from '../components/views/Offline';
-import Register from '../components/views/Register';
+import Landing from './views/Landing';
+import Login from './views/Login';
+import Offline from './views/Offline';
+import Register from './views/Register';
 import authentication from 'feathers-authentication/client';
 import baseStyles from '../styles/baseStyles';
 import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
-import {Router, Route} from 'react-native-router-flux';
+import {Actions, Router, Route} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect} from '../actions/AppActionCreators';
 

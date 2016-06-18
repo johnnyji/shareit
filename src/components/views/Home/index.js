@@ -5,13 +5,13 @@ import React, {
   Text,
   View
 } from 'react-native';
-import {Actions} from 'react-native-router-flux';
 import AppActionCreators from '../../../actions/AppActionCreators';
 import AuthActionCreators from '../../../actions/AuthActionCreators';
 import {connect} from 'react-redux';
 import Clickable from '../../ui/Clickable';
 import CustomPropTypes from '../../utils/CustomPropTypes';
 import pureRender from 'pure-render-decorator';
+import RequiresCurrentUser from '../../../containers/RequiresCurrentUser';
 import Toolbar from '../../ui/Toolbar';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 
@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
 });
 
 @connect((state) => ({
-  currentUser: state.auth.get('currentUser'),
   loggingOut: state.auth.get('loggingOut'),
   loggedOut: state.auth.get('loggedOut'),
   logoutError: state.auth.get('logoutError')
 }))
+@RequiresCurrentUser
 @pureRender
 export default class Home extends Component {
 
@@ -57,11 +57,6 @@ export default class Home extends Component {
     // If there was an error in the logout process
     if (!this.props.logoutError && nextProps.logoutError) {
       return this.props.dispatch(AppActionCreators.setAlert(nextProps.logoutError));
-    }
-    
-    // If the user has successfully logged out, we send them back to the app main landing
-    if (!this.props.loggedOut && nextProps.loggedOut) {
-      Actions.Landing();
     }
   }
 
@@ -94,9 +89,8 @@ export default class Home extends Component {
       .then(() => {
         dispatch(AuthActionCreators.logoutSuccess());
       })
-      .catch((err) => {
-        debugger;
-        dispatch(AuthActionCreators.logoutError(err.message));
+      .catch(({message}) => {
+        dispatch(AuthActionCreators.logoutError(message));
       });
   };
 
