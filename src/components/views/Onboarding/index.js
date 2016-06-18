@@ -14,6 +14,9 @@ export default class Onboarding extends Component {
   };
 
   render() {
+    // TODO: Here we must take the current user's info and save it into our
+    // onboarding reducer before we can actually show any onboarding components
+
     if (!this.props.currentUser.has('fullName')) return <PickName />;
     return <PickUsername />;
   }
