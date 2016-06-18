@@ -108,7 +108,7 @@ export default class Register extends Component {
       .service('users')
       .create({
         email: email.toLowerCase(),
-        password: password.toLowerCase()
+        password
       })
       .then(this._handleAuthenticate)
       .then((response) => {

@@ -1,4 +1,5 @@
 import React, {
+  Alert,
   AsyncStorage,
   PropTypes,
   View
@@ -18,7 +19,7 @@ import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
 import {Router, Route} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-import {onConnect, onDisconnect, setLoading} from '../actions/AppActionCreators';
+import {onConnect, onDisconnect} from '../actions/AppActionCreators';
 
 // This is required for socket.io-client due to a bug in React Native debugger
 if (window.navigator && Object.keys(window.navigator).length === 0) {
@@ -34,8 +35,7 @@ const API_PATH = 'http://localhost:3030';
   currentUser: state.auth.get('currentUser'),
   fetchingCurrentUser: state.auth.get('fetchingCurrentUser'),
   fetchedCurrentUser: state.auth.get('fetchedCurrentUser'),
-  isConnected: state.app.get('isConnected'),
-  isLoading: state.app.get('isLoading')
+  isConnected: state.app.get('isConnected')
 }))
 export default class Root extends React.Component {
 
@@ -51,8 +51,7 @@ export default class Root extends React.Component {
     dispatch: PropTypes.func.isRequired,
     fetchingCurrentUser: PropTypes.bool.isRequired,
     fetchedCurrentUser: PropTypes.bool.isRequired,
-    isConnected: PropTypes.bool.isRequired,
-    isLoading: PropTypes.bool.isRequired
+    isConnected: PropTypes.bool.isRequired
   };
 
   static childContextTypes = {
@@ -61,7 +60,7 @@ export default class Root extends React.Component {
 
   constructor(props) {
     super(props);
-    const socket = io(API_PATH, {transports: ['websocket']});
+    const socket = io(API_PATH, {transports: ['websocket'], forceNew: true});
 
     this.app = feathers()
       .configure(socketio(socket))
@@ -83,17 +82,26 @@ export default class Root extends React.Component {
     this.app.io.on('disconnect', this._handleDisconnect);
   }
 
+  componentWillReceiveProps(nextProps) {
+    const {alert: incomingAlert} = nextProps;
+
+    // If there's a new alert, we want to display it to the user
+    if (!this.props.alert.equals(incomingAlert)) {
+      Alert.alert(
+        incomingAlert.get('title'),
+        incomingAlert.get('message')
+      );
+    }
+  }
+
   render() {
     const {
       currentUser,
       fetchingCurrentUser,
-      fetchedCurrentUser,
-      isConnected: clientIsConnected,
-      isLoading
+      isConnected: clientIsConnected
     } = this.props;
 
-    if (isLoading) return <FullPageSpinner />;
-    if (fetchingCurrentUser || !fetchedCurrentUser) return <FullPageSpinner />;
+    if (fetchingCurrentUser) return <FullPageSpinner />;
 
     return (
       <View style={baseStyles.fullWidth}>
@@ -144,11 +152,9 @@ export default class Root extends React.Component {
     this.app.authenticate()
       .then((user) => {
         dispatch(AuthActionCreators.authenticateSuccess(user));
-        dispatch(setLoading(false));
       })
       .catch((err) => {
         dispatch(AuthActionCreators.authenticateError(err.message));
-        dispatch(setLoading(false));
       });
   };
 

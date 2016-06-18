@@ -43,9 +43,7 @@ export default class Login extends Component {
     app: PropTypes.object.isRequired
   };
 
-  componentWillUpdate(nextProps) {
-    // componentWillUpdate doesn't fire even though the
-    // user is logged in
+  componentWillReceiveProps(nextProps) {
     if (!this.props.currentUser && nextProps.currentUser) {
       Actions.Home();
     }
@@ -97,7 +95,7 @@ export default class Login extends Component {
     this.context.app.authenticate({
       type: 'local',
       email: email.toLowerCase(),
-      password: password
+      password
     })
       .then((response) => {
         dispatch(AuthActionCreators.authenticateSuccess(response));

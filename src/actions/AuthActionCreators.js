@@ -2,6 +2,9 @@ import {
   AUTHENTICATE,
   AUTHENTICATE_ERROR,
   AUTHENTICATE_SUCCESS,
+  LOGOUT,
+  LOGOUT_ERROR,
+  LOGOUT_SUCCESS,
   UPDATE_EMAIL,
   UPDATE_PASSWORD
 } from '../action_types/AuthActionTypes';
@@ -30,6 +33,25 @@ const AuthActionCreators = {
     return {
       type: AUTHENTICATE_SUCCESS,
       data: {user: data}
+    };
+  },
+
+  logout() {
+    return {
+      type: LOGOUT
+    };
+  },
+
+  logoutError(message) {
+    return {
+      type: LOGOUT_ERROR,
+      data: {error: message}
+    };
+  },
+
+  logoutSuccess() {
+    return {
+      type: LOGOUT_SUCCESS
     };
   },
 

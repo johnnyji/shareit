@@ -1,8 +1,7 @@
 import {
   ON_CONNECT,
   ON_DISCONNECT,
-  SET_ALERT,
-  SET_LOADING
+  SET_ALERT
 } from '../action_types/AppActionTypes';
 
 const AppActionCreators = {
@@ -25,15 +24,8 @@ const AppActionCreators = {
       type: SET_ALERT,
       data: {title, message}
     };
-  },
-
-  setLoading(loading) {
-    return {
-      type: SET_LOADING,
-      data: {loading}
-    };
   }
-  
+
 };
 
 export default AppActionCreators;

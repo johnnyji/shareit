@@ -2,6 +2,9 @@ import {
   AUTHENTICATE,
   AUTHENTICATE_ERROR,
   AUTHENTICATE_SUCCESS,
+  LOGOUT,
+  LOGOUT_ERROR,
+  LOGOUT_SUCCESS,
   UPDATE_EMAIL,
   UPDATE_PASSWORD
 } from '../action_types/AuthActionTypes';
@@ -22,7 +25,10 @@ const initialState = Immutable.fromJS({
       value: '',
       error: null
     }
-  }
+  },
+  loggingOut: false,
+  loggedOut: false,
+  logoutError: null
 });
 
 export default function AuthReducer(state = initialState, action) {
@@ -52,6 +58,26 @@ export default function AuthReducer(state = initialState, action) {
         fetchingCurrentUser: false,
         fetchedCurrentUser: true
       });
+    }
+
+    case LOGOUT: {
+      return state.merge({
+        loggingOut: true,
+        loggedOut: false,
+        logoutError: null
+      });
+    }
+
+    case LOGOUT_ERROR: {
+      return state.merge({
+        loggingOut: false,
+        loggedOut: false,
+        logoutError: action.data.error
+      });
+    }
+
+    case LOGOUT_SUCCESS: {
+      return initialState;
     }
 
     case UPDATE_EMAIL: {
