@@ -44,7 +44,18 @@ export default class Login extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (!this.props.currentUser && nextProps.currentUser) {
+    const {currentUser} = nextProps;
+
+    if (!this.props.currentUser && currentUser) {
+      // If the user has not been onboarded fully,
+      // we need to step them through the unboarding screen
+      if (!currentUser.get('onboarded')) {
+        Actions.Onboarding();
+        return;
+      }
+
+      // Otherwise if the user has already been onboarded, we
+      // just follow the regular flow
       Actions.Home();
     }
   }
