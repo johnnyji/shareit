@@ -2,6 +2,7 @@ import {AUTHENTICATE_SUCCESS} from '../action_types/AuthActionTypes';
 import {
   UPDATE_NAME
 } from '../action_types/OnboardingActionTypes';
+import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
@@ -13,27 +14,33 @@ const initialState = Immutable.fromJS({
   }
 });
 
-export default function OnboardingReducer(state = initialState, action) {
-  switch (action.type) {
+export default createReducer(initialState, {
+  name: 'Onboarding',
+  
+  handlers: {
+    onCurrentUser: [AUTHENTICATE_SUCCESS],
+    onUpdateName: [UPDATE_NAME]
+  },
 
-    // When the user successfully authenticates, if they have not yet been onboarded,
-    // we want to hydrate the state with their information
-    case AUTHENTICATE_SUCCESS: {
-      const {user} = action.data;
-      // If they're already onboarded, we won't bother hydrating the onboarding state as
-      // it will never be used
-      if (user.onboarded) return state;
+  /**
+   * When the current user is either fetched or authenticated,
+   * we want to see if they've been onboarded, if not we set their info
+   * into the onboarding state
+   * @param {Immutable.Map} state - The previous onboarding state
+   * @param {Object} options - The action data
+   * @param {Object} options.user - The current user
+   * @returns {Immutable.Map} - The onboarding state
+   */
+  onCurrentUser(state, {user}) {
+    // If they're already onboarded, we won't bother hydrating the onboarding state as
+    // it will never be used
+    if (user.onboarded) return state;
 
-      return state.setIn(['form', 'name', 'value'], user.fullName);
-    }
+    return state.setIn(['form', 'name', 'value'], user.fullName);
+  },
 
-    case UPDATE_NAME: {
-      return state.updateIn(['form', 'name'], (name) => name.merge(action.data));
-    }
-
-    default: {
-      return state;
-    }
-
+  onUpdateName(state, data) {
+    return state.updateIn(['form', 'name'], (name) => name.merge(data));
   }
-}
+
+});

@@ -8,6 +8,7 @@ import React, {
 import baseStyles from '../../../styles/baseStyles';
 import Clickable from '../../ui/Clickable';
 import ColorScheme from '../../../styles/ColorScheme';
+import CustomPropTypes from '../../utils/CustomPropTypes';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Input from '../../ui/Input';
 import OnboardingActionCreators from '../../../actions/OnboardingActionCreators';
@@ -42,11 +43,13 @@ export default class PickName extends Component {
   static displayName = 'PickName';
 
   static propTypes = {
+    currentUser: CustomPropTypes.user.isRequired,
     name: PropTypes.string.isRequired,
     nameError: PropTypes.string
   };
 
   static contextTypes = {
+    app: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -90,6 +93,21 @@ export default class PickName extends Component {
   }
 
   _handleNextStep = () => {
+    const {currentUser, name} = this.props;
+    const {app, dispatch} = this.context;
+    
+    dispatch(OnboardingActionCreators.writeName());
+
+    app
+      .service('users')
+      .update(currentUser.get('_id'), {fullName: name})
+      .then((response) => {
+        debugger;
+        dispatch(OnboardingActionCreators.writeNameSuccess(response));
+      })
+      .catch(({message}) => {
+        dispatch(OnboardingActionCreators.writeNameError(message));
+      });
   };
 
   _handleUpdateName = (name) => {

@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 
 @connect((state) => ({
   authenticating: state.auth.get('authenticating'),
-  currentUser: state.auth.get('currentUser'),
+  currentUser: state.app.get('currentUser'),
   email: state.auth.getIn(['form', 'email', 'value']),
   emailError: state.auth.getIn(['form', 'email', 'error']),
   password: state.auth.getIn(['form', 'password', 'value']),

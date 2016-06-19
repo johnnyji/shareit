@@ -27,7 +27,7 @@ export default (ComposedComponent) => {
   }
 
   return connect((state) => ({
-    currentUser: state.auth.get('currentUser')
+    currentUser: state.app.get('currentUser')
   }))(RequiresCurrentUser);
 
 };

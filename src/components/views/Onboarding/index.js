@@ -27,7 +27,10 @@ export default class Onboarding extends Component {
     const {currentUser, name, nameError} = this.props;
 
     if (currentUser.get('fullName') === '') {
-      return <PickName name={name} nameError={nameError} />;
+      return <PickName
+        currentUser={currentUser}
+        name={name}
+        nameError={nameError} />;
     }
 
     return <PickUsername />;

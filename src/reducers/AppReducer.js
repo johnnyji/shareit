@@ -1,9 +1,15 @@
 import {
   ON_CONNECT,
   ON_DISCONNECT,
-  SET_ALERT,
-  SET_LOADING
+  SET_ALERT
 } from '../action_types/AppActionTypes';
+import {
+  AUTHENTICATE_SUCCESS
+} from '../action_types/AuthActionTypes';
+import {
+  WRITE_NAME_SUCCESS
+} from '../action_types/OnboardingActionTypes';
+import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
@@ -11,30 +17,36 @@ const initialState = Immutable.fromJS({
     title: null,
     message: null
   },
+  currentUser: null,
   isConnected: false
 });
 
-export default function AppReducer(state = initialState, action) {
-  switch (action.type) {
+export default createReducer(initialState, {
+  name: 'App',
 
-    case ON_CONNECT: {
-      return state.set('isConnected', true);
-    }
+  handlers: {
+    onSetCurrentUser: [AUTHENTICATE_SUCCESS, WRITE_NAME_SUCCESS],
+    onServerConnect: [ON_CONNECT],
+    onServerDisconnect: [ON_DISCONNECT],
+    onSetAlert: [SET_ALERT]
+  },
 
-    case ON_DISCONNECT: {
-      return state.set('isConnected', false);
-    }
+  onSetCurrentUser(state, {user}) {
+    return state.set('currentUser', Immutable.fromJS(user));
+  },
 
-    case SET_ALERT: {
-      return state.set('alert', Immutable.Map({
-        title: action.data.title,
-        message: action.data.message
-      }));
-    }
+  onServerConnect(state) {
+    return state.set('isConnected', true);
+  },
 
-    default: {
-      return state;
-    }
+  onServerDisconnect(state) {
+    return state.set('isConnected', false);
+  },
 
+  onSetAlert(state, {title, message}) {
+    return state.merge({
+      alert: {title, message}
+    });
   }
-}
+
+});

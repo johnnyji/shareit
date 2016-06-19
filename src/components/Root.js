@@ -33,7 +33,7 @@ const API_PATH = 'http://localhost:3030';
 
 @connect((state) => ({
   alert: state.app.get('alert'),
-  currentUser: state.auth.get('currentUser'),
+  currentUser: state.app.get('currentUser'),
   fetchingCurrentUser: state.auth.get('fetchingCurrentUser'),
   fetchedCurrentUser: state.auth.get('fetchedCurrentUser'),
   isConnected: state.app.get('isConnected')

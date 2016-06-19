@@ -8,12 +8,12 @@ import {
   UPDATE_EMAIL,
   UPDATE_PASSWORD
 } from '../action_types/AuthActionTypes';
+import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
   authenticating: false,
   authenticationError: null,
-  currentUser: null,
   fetchingCurrentUser: false,
   fetchedCurrentUser: false,
   form: {
@@ -31,66 +31,72 @@ const initialState = Immutable.fromJS({
   logoutError: null
 });
 
-export default function AuthReducer(state = initialState, action) {
-  switch (action.type) {
+export default createReducer(initialState, {
+  name: 'Auth',
+  
+  handlers: {
+    onAuthenticating: [AUTHENTICATE],
+    onAuthenticateError: [AUTHENTICATE_ERROR],
+    onAuthenticateSuccess: [AUTHENTICATE_SUCCESS],
+    onLoggingOut: [LOGOUT],
+    onLogoutError: [LOGOUT_ERROR],
+    onLogoutSuccess: [LOGOUT_SUCCESS],
+    onUpdateEmail: [UPDATE_EMAIL],
+    onUpdatePassword: [UPDATE_PASSWORD]
+  },
 
-    case AUTHENTICATE: {
-      return state.merge({
-        authenticating: true,
-        fetchingCurrentUser: true,
-        fetchedCurrentUser: false
-      });
-    }
+  onAuthenticating(state) {
+    return state.merge({
+      authenticating: true,
+      fetchingCurrentUser: true,
+      fetchedCurrentUser: false
+    });
+  },
 
-    case AUTHENTICATE_ERROR: {
-      return state.merge({
-        authenticating: false,
-        authenticationError: action.data.error,
-        fetchingCurrentUser: false,
-        fetchedCurrentUser: false
-      });
-    }
+  onAuthenticateError(state, {error}) {
+    return state.merge({
+      authenticating: false,
+      authenticationError: error,
+      fetchingCurrentUser: false,
+      fetchedCurrentUser: false
+    });
+  },
 
-    case AUTHENTICATE_SUCCESS: {
-      return state.merge({
-        authenticating: false,
-        currentUser: action.data.user,
-        fetchingCurrentUser: false,
-        fetchedCurrentUser: true
-      });
-    }
+  onAuthenticateSuccess(state) {
+    return state.merge({
+      authenticating: false,
+      authenticationError: null,
+      fetchingCurrentUser: false,
+      fetchedCurrentUser: true
+    });
+  },
 
-    case LOGOUT: {
-      return state.merge({
-        loggingOut: true,
-        loggedOut: false,
-        logoutError: null
-      });
-    }
+  onLoggingOut(state) {
+    return state.merge({
+      loggingOut: true,
+      loggedOut: false,
+      logoutError: null
+    });
+  },
 
-    case LOGOUT_ERROR: {
-      return state.merge({
-        loggingOut: false,
-        loggedOut: false,
-        logoutError: action.data.error
-      });
-    }
+  onLogoutError(state, {error}) {
+    return state.merge({
+      loggingOut: false,
+      loggedOut: false,
+      logoutError: error
+    });
+  },
 
-    case LOGOUT_SUCCESS: {
-      return initialState;
-    }
+  onLogoutSuccess() {
+    return initialState;
+  },
 
-    case UPDATE_EMAIL: {
-      return state.updateIn(['form', 'email'], (email) => email.merge(action.data));
-    }
+  onUpdateEmail(state, data) {
+    return state.updateIn(['form', 'email'], (email) => email.merge(data));
+  },
 
-    case UPDATE_PASSWORD: {
-      return state.updateIn(['form', 'password'], (email) => email.merge(action.data));
-    }
-
-    default: {
-      return state;
-    }
-
+  onUpdatePassword(state, data) {
+    return state.updateIn(['form', 'password'], (email) => email.merge(data));
   }
-}
+
+});
