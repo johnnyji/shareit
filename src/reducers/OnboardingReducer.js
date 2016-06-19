@@ -1,6 +1,7 @@
 import {AUTHENTICATE_SUCCESS} from '../action_types/AuthActionTypes';
 import {
-  UPDATE_NAME
+  UPDATE_NAME,
+  UPDATE_USERNAME
 } from '../action_types/OnboardingActionTypes';
 import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
@@ -8,6 +9,10 @@ import Immutable from 'immutable';
 const initialState = Immutable.fromJS({
   form: {
     name: {
+      value: '',
+      error: null
+    },
+    username: {
       value: '',
       error: null
     }
@@ -19,7 +24,8 @@ export default createReducer(initialState, {
   
   handlers: {
     onCurrentUser: [AUTHENTICATE_SUCCESS],
-    onUpdateName: [UPDATE_NAME]
+    onUpdateName: [UPDATE_NAME],
+    onUpdateUsername: [UPDATE_USERNAME]
   },
 
   /**
@@ -41,6 +47,10 @@ export default createReducer(initialState, {
 
   onUpdateName(state, data) {
     return state.updateIn(['form', 'name'], (name) => name.merge(data));
+  },
+
+  onUpdateUsername(state, data) {
+    return state.updateIn(['form', 'username'], (username) => username.merge(data));
   }
 
 });

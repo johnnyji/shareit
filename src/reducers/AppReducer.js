@@ -7,7 +7,8 @@ import {
   AUTHENTICATE_SUCCESS
 } from '../action_types/AuthActionTypes';
 import {
-  WRITE_NAME_SUCCESS
+  WRITE_NAME_SUCCESS,
+  WRITE_USERNAME_SUCCESS
 } from '../action_types/OnboardingActionTypes';
 import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
@@ -25,7 +26,13 @@ export default createReducer(initialState, {
   name: 'App',
 
   handlers: {
-    onSetCurrentUser: [AUTHENTICATE_SUCCESS, WRITE_NAME_SUCCESS],
+    onSetCurrentUser: [AUTHENTICATE_SUCCESS],
+    onUpdateCurrentUser: [
+      // Update fullName
+      WRITE_NAME_SUCCESS,
+      // Update username
+      WRITE_USERNAME_SUCCESS
+    ],
     onServerConnect: [ON_CONNECT],
     onServerDisconnect: [ON_DISCONNECT],
     onSetAlert: [SET_ALERT]
@@ -33,6 +40,10 @@ export default createReducer(initialState, {
 
   onSetCurrentUser(state, {user}) {
     return state.set('currentUser', Immutable.fromJS(user));
+  },
+
+  onUpdateCurrentUser(state, {user}) {
+    return state.merge({currentUser: user});
   },
 
   onServerConnect(state) {

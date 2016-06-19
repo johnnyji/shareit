@@ -49,7 +49,7 @@ export default class PickName extends Component {
   };
 
   static contextTypes = {
-    app: PropTypes.func.isRequired,
+    app: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
   };
 
@@ -100,10 +100,9 @@ export default class PickName extends Component {
 
     app
       .service('users')
-      .update(currentUser.get('_id'), {fullName: name})
-      .then((response) => {
-        debugger;
-        dispatch(OnboardingActionCreators.writeNameSuccess(response));
+      .patch(currentUser.get('_id'), {fullName: name})
+      .then((user) => {
+        dispatch(OnboardingActionCreators.writeNameSuccess(user));
       })
       .catch(({message}) => {
         dispatch(OnboardingActionCreators.writeNameError(message));

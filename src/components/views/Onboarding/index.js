@@ -11,7 +11,9 @@ import RequiresCurrentUser from '../../../containers/RequiresCurrentUser';
 @RequiresCurrentUser
 @connect((state) => ({
   name: state.onboarding.getIn(['form', 'name', 'value']),
-  nameError: state.onboarding.getIn(['form', 'name', 'error'])
+  nameError: state.onboarding.getIn(['form', 'name', 'error']),
+  username: state.onboarding.getIn(['form', 'username', 'value']),
+  usernameError: state.onboarding.getIn(['form', 'username', 'error'])
 }))
 export default class Onboarding extends Component {
   
@@ -20,11 +22,13 @@ export default class Onboarding extends Component {
   static propTypes = {
     currentUser: CustomPropTypes.user.isRequired,
     name: PropTypes.string.isRequired,
-    nameError: PropTypes.string
+    nameError: PropTypes.string,
+    username: PropTypes.string.isRequired,
+    usernameError: PropTypes.string
   };
 
   render() {
-    const {currentUser, name, nameError} = this.props;
+    const {currentUser, name, nameError, username, usernameError} = this.props;
 
     if (currentUser.get('fullName') === '') {
       return <PickName
@@ -33,7 +37,12 @@ export default class Onboarding extends Component {
         nameError={nameError} />;
     }
 
-    return <PickUsername />;
+    return (
+      <PickUsername
+        currentUser={currentUser}
+        username={username}
+        usernameError={usernameError} />
+    );
   }
 }
 
