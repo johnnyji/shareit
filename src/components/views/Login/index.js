@@ -67,7 +67,7 @@ export default class Login extends Component {
         <StatusBarEscape />
 
         <Toolbar onBackNavClick={Actions.pop}>
-          <Text style={[baseStyles.subheader, baseStyles.centerChildrenText]}>Login</Text>
+          <Text style={[baseStyles.subheader, baseStyles.centerText]}>Login</Text>
         </Toolbar>
 
         <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>

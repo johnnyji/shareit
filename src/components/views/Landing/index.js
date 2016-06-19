@@ -10,6 +10,9 @@ import Button from '../../ui/Button';
 import ColorScheme from '../../../styles/ColorScheme';
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -27,7 +30,7 @@ export default class Login extends Component {
   render() {
     
     return (
-      <View style={baseStyles.stretchCrossAxis}>
+      <View style={[styles.main, baseStyles.stretchCrossAxis]}>
 
         <View style={[baseStyles.centerChildren, {flex: 5}]}>
           <Text style={styles.title}>ShareIt</Text>

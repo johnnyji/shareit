@@ -62,7 +62,7 @@ export default class Register extends Component {
         <StatusBarEscape />
 
         <Toolbar onBackNavClick={Actions.pop}>
-          <Text style={[baseStyles.subheader, baseStyles.centerChildrenText]}>Sign up</Text>
+          <Text style={[baseStyles.subheader, baseStyles.centerText]}>Sign up</Text>
         </Toolbar>
 
         <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
