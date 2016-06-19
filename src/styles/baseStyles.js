@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
-import ColorScheme from './ColorScheme';
+// import ColorScheme from './ColorScheme';
 
 export default StyleSheet.create({
-  center: {
+  centerChildren: {
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -12,12 +12,13 @@ export default StyleSheet.create({
   fullWidth: {
     flex: 1
   },
-  stretch: {
+  row: {
+    flexDirection: 'row'
+  },
+  stretchCrossAxis: {
     alignItems: 'stretch'
   },
   subheader: {
-    color: ColorScheme.primary,
-    fontSize: 18,
-    fontWeight: 'bold'
+    fontSize: 18
   }
 });

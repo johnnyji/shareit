@@ -50,7 +50,7 @@ export default class Toolbar extends Component {
     return (
       <View style={[
         styles.main,
-        baseStyles.center,
+        baseStyles.centerChildren,
         style && style
       ]}>
         {onBackNavClick && this._renderBackNavButton()}

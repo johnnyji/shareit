@@ -5,9 +5,9 @@ import React, {
   View
 } from 'react-native';
 import {Actions} from 'react-native-router-flux';
-import {center, stretch, fullWidth} from '../../../styles/baseStyles';
+import baseStyles from '../../../styles/baseStyles';
 import Button from '../../ui/Button';
-import {primaryLight, primaryLighter} from '../../../styles/ColorScheme';
+import ColorScheme from '../../../styles/ColorScheme';
 
 const styles = StyleSheet.create({
   title: {
@@ -27,24 +27,24 @@ export default class Login extends Component {
   render() {
     
     return (
-      <View style={fullWidth}>
+      <View style={baseStyles.stretchCrossAxis}>
 
-        <View style={[center, {flex: 5}]}>
+        <View style={[baseStyles.centerChildren, {flex: 5}]}>
           <Text style={styles.title}>ShareIt</Text>
           <Text style={styles.description}>
             Find out whats going on near you!
           </Text>
         </View>
 
-        <View style={[center, stretch, {flex: 2}]}>
+        <View style={[baseStyles.centerChildren, baseStyles.stretchCrossAxis, {flex: 2}]}>
           <Button
             label='Login'
             onClick={Actions.Login}
-            style={{backgroundColor: primaryLighter}} />
+            style={{backgroundColor: ColorScheme.primaryLighter}} />
           <Button
             label='Sign up'
             onClick={Actions.Register}
-            style={{backgroundColor: primaryLight}} />
+            style={{backgroundColor: ColorScheme.primaryLight}} />
         </View>
 
       </View>

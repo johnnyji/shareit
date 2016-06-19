@@ -45,7 +45,7 @@ export default function AuthReducer(state = initialState, action) {
     case AUTHENTICATE_ERROR: {
       return state.merge({
         authenticating: false,
-        authenticationError: action.data.errorMessage,
+        authenticationError: action.data.error,
         fetchingCurrentUser: false,
         fetchedCurrentUser: false
       });

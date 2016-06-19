@@ -11,13 +11,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Landing from './views/Landing';
 import Login from './views/Login';
 import Offline from './views/Offline';
+import Onboarding from './views/Onboarding';
 import Register from './views/Register';
 import authentication from 'feathers-authentication/client';
 import baseStyles from '../styles/baseStyles';
 import feathers from 'feathers/client';
 import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
-import {Actions, Router, Route} from 'react-native-router-flux';
+import {Router, Route} from 'react-native-router-flux';
 import {connect} from 'react-redux';
 import {onConnect, onDisconnect} from '../actions/AppActionCreators';
 
@@ -55,7 +56,8 @@ export default class Root extends React.Component {
   };
 
   static childContextTypes = {
-    app: PropTypes.object.isRequired
+    app: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -73,7 +75,8 @@ export default class Root extends React.Component {
 
   getChildContext() {
     return {
-      app: this.app
+      app: this.app,
+      dispatch: this.props.dispatch
     };
   }
 
@@ -131,9 +134,16 @@ export default class Root extends React.Component {
             title='Register' />
 
           <Route
+            component={Onboarding}
+            hideNavBar={true}
+            initial={clientIsConnected && currentUser && !currentUser.get('onboarded')}
+            name='Onboarding'
+            title='Onboarding' />
+
+          <Route
             component={Home}
             hideNavBar={true}
-            initial={clientIsConnected && currentUser}
+            initial={clientIsConnected && currentUser && currentUser.get('onboarded')}
             name='Home'
             title='Home' />
         </Router>

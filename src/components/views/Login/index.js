@@ -50,6 +50,7 @@ export default class Login extends Component {
       // If the user has not been onboarded fully,
       // we need to step them through the unboarding screen
       if (!currentUser.get('onboarded')) {
+        console.log('User is not onboarded... So we want to onboard them');
         Actions.Onboarding();
         return;
       }
@@ -66,10 +67,10 @@ export default class Login extends Component {
         <StatusBarEscape />
 
         <Toolbar onBackNavClick={Actions.pop}>
-          <Text style={[baseStyles.subheader, baseStyles.centerText]}>Login</Text>
+          <Text style={[baseStyles.subheader, baseStyles.centerChildrenText]}>Login</Text>
         </Toolbar>
 
-        <View style={[baseStyles.stretch, {flex: 8}]}>
+        <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
           <Input
             borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdateEmail}
@@ -90,8 +91,7 @@ export default class Login extends Component {
         <Button
           label='Login'
           onClick={this._handleLogin}
-          style={baseStyles.center} />
-
+          style={baseStyles.centerChildren} />
       </View>
     );
   }
@@ -105,7 +105,7 @@ export default class Login extends Component {
 
     this.context.app.authenticate({
       type: 'local',
-      email: email.toLowerCase(),
+      email: email.toLowerCase().trim(),
       password
     })
       .then((response) => {

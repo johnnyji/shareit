@@ -5,30 +5,49 @@ import React, {
   Text,
   View
 } from 'react-native';
-import {connect} from 'react-redux';
+import baseStyles from '../../../styles/baseStyles';
 import Clickable from '../../ui/Clickable';
-import CustomPropTypes from '../../utils/CustomPropTypes';
-import OnboardingActionCreators from '../../../actions/OnboardingActionCreators';
+import ColorScheme from '../../../styles/ColorScheme';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Input from '../../ui/Input';
+import OnboardingActionCreators from '../../../actions/OnboardingActionCreators';
 
 const styles = StyleSheet.create({
-  main: {},
-  nextStepLink: {}
+  main: {
+    flex: 1,
+    justifyContent: 'flex-start'
+  },
+  font: {
+    fontSize: 32
+  },
+  input: {
+    color: ColorScheme.primary,
+    margin: 8
+  },
+  nextStepLinkWrapper: {
+    height: 30
+  },
+  nextStepLink: {
+    color: ColorScheme.grayLight,
+    marginRight: 8
+  },
+  nextStepIcon: {
+    color: ColorScheme.grayLight,
+    top: 2
+  }
 });
 
-@connect((state) => ({
-  name: state.onboarding.getIn(['form', 'name', 'value']),
-  nameError: state.onboarding.getIn(['form', 'name', 'error'])
-}))
 export default class PickName extends Component {
   
   static displayName = 'PickName';
 
   static propTypes = {
-    currentUser: CustomPropTypes.user.isRequired,
-    dispatch: PropTypes.func.isRequired,
     name: PropTypes.string.isRequired,
     nameError: PropTypes.string
+  };
+
+  static contextTypes = {
+    dispatch: PropTypes.func.isRequired
   };
 
   render() {
@@ -36,20 +55,36 @@ export default class PickName extends Component {
     const isValidName = name.length > 0 && !nameError;
 
     return (
-      <View style={styles.main}>
-        <Text>Hello,</Text>
-        <Input
-          height={100}
-          onUpdate={this._handleUpdateName}
-          placeholder="Your name"
-          value={name} />
-        {isValidName &&
-          <Clickable
-            onClick={this._handleNextStep}
-            style={styles.nextStepLink}>
-            <Text>Lets move on!</Text>
-          </Clickable>
-        }
+      <View style={[styles.main, baseStyles.stretchCrossAxis]}>
+        <View style={{flex: 2}} />
+
+        <View style={[{flex: 5}, baseStyles.centerChildren, baseStyles.stretchCrossAxis]}>
+          <Text style={[styles.font, baseStyles.centerText]}>
+            Hello,
+          </Text>
+          <Input
+            autoFocus={true}
+            height={100}
+            onUpdate={this._handleUpdateName}
+            placeholder="Your name"
+            showBorderBottom={false}
+            style={[
+              styles.font,
+              styles.input,
+              baseStyles.centerText
+            ]}
+            value={name} />
+          <View style={styles.nextStepLinkWrapper}>
+            {isValidName &&
+              <Clickable onClick={this._handleNextStep} style={[baseStyles.row, baseStyles.center]}>
+                <Text style={styles.nextStepLink}>Yeah yeah, lets move on</Text>
+                <Icon name='ios-arrow-forward' size={18} style={styles.nextStepIcon} />
+              </Clickable>
+            }
+          </View>
+        </View>
+
+        <View style={{flex: 7}} />
       </View>
     );
   }
@@ -58,7 +93,7 @@ export default class PickName extends Component {
   };
 
   _handleUpdateName = (name) => {
-    this.props.dispatch(OnboardingActionCreators.updateName(name));
+    this.context.dispatch(OnboardingActionCreators.updateName(name));
   };
 
 }

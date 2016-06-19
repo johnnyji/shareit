@@ -50,7 +50,8 @@ export default class Register extends Component {
 
   componentWillUpdate(nextProps) {
     if (!this.props.currentUser && nextProps.currentUser) {
-      Actions.Setup();
+      console.log('User is registered and now we take them to the Setup page.');
+      Actions.Onboarding();
     }
   }
 
@@ -61,10 +62,10 @@ export default class Register extends Component {
         <StatusBarEscape />
 
         <Toolbar onBackNavClick={Actions.pop}>
-          <Text style={[baseStyles.subheader, baseStyles.centerText]}>Sign up</Text>
+          <Text style={[baseStyles.subheader, baseStyles.centerChildrenText]}>Sign up</Text>
         </Toolbar>
 
-        <View style={[baseStyles.stretch, {flex: 8}]}>
+        <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
           <Input
             borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdateEmail}
@@ -85,7 +86,7 @@ export default class Register extends Component {
         <Button
           label='Sign up!'
           onClick={this._handleRegister}
-          style={baseStyles.center} />
+          style={baseStyles.centerChildren} />
 
       </View>
     );
@@ -96,7 +97,7 @@ export default class Register extends Component {
 
     return this.context.app.authenticate({
       type: 'local',
-      email,
+      email: email.toLowerCase().trim(),
       password
     });
   };
@@ -107,7 +108,7 @@ export default class Register extends Component {
     this.context.app
       .service('users')
       .create({
-        email: email.toLowerCase(),
+        email: email.toLowerCase().trim(),
         password
       })
       .then(this._handleAuthenticate)

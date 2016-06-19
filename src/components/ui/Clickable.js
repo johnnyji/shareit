@@ -38,7 +38,7 @@ export default class Clickable extends Component {
         onPress={disabled ? null : this._handlePress}
         style={[
           styles.main,
-          baseStyles.center,
+          baseStyles.centerChildren,
           style && style
         ]}>
         {children}

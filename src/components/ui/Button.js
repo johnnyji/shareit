@@ -60,7 +60,7 @@ export default class Button extends Component {
         onPress={disabled ? null : this._handlePress}
         style={[
           styles.main,
-          baseStyles.center,
+          baseStyles.centerChildren,
           fullWidth && baseStyles.fullWidth,
           disabled && styles.disabled,
           style && style
