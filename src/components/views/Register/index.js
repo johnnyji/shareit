@@ -12,6 +12,7 @@ import Input from '../../ui/Input';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 import Toolbar from '../../ui/Toolbar';
 import baseStyles from '../../../styles/baseStyles';
+import getResponseErrors from '../../../utils/http/getResponseErrors';
 import pureRender from 'pure-render-decorator';
 import {Actions} from 'react-native-router-flux';
 import {connect} from 'react-redux';
@@ -116,7 +117,8 @@ export default class Register extends Component {
         dispatch(AuthActionCreators.authenticateSuccess(response));
       })
       .catch((err) => {
-        dispatch(AuthActionCreators.authenticateError(err.message));
+        const firstError = getResponseErrors(err)[0];
+        dispatch(AuthActionCreators.authenticateError(firstError));
       });
   };
 

@@ -9,6 +9,7 @@ import baseStyles from '../../../styles/baseStyles';
 import Button from '../../ui/Button';
 import ColorScheme from '../../../styles/ColorScheme';
 import CustomPropTypes from '../../utils/CustomPropTypes';
+import getResponseErrors from '../../../utils/http/getResponseErrors';
 import Input from '../../ui/Input';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 import Toolbar from '../../ui/Toolbar';
@@ -112,7 +113,8 @@ export default class Login extends Component {
         dispatch(AuthActionCreators.authenticateSuccess(response));
       })
       .catch((err) => {
-        dispatch(AuthActionCreators.authenticateError(err.message));
+        const firstError = getResponseErrors(err)[0];
+        dispatch(AuthActionCreators.authenticateError(firstError));
       });
   };
   

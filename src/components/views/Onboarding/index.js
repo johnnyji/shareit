@@ -7,8 +7,10 @@ import CustomPropTypes from '../../utils/CustomPropTypes';
 import PickName from './PickName';
 import PickUsername from './PickUsername';
 import RequiresCurrentUser from '../../../containers/RequiresCurrentUser';
+import RequiresNewLocation from '../../../containers/RequiresNewLocation';
 
 @RequiresCurrentUser
+@RequiresNewLocation
 @connect((state) => ({
   name: state.onboarding.getIn(['form', 'name', 'value']),
   nameError: state.onboarding.getIn(['form', 'name', 'error']),
@@ -31,10 +33,12 @@ export default class Onboarding extends Component {
     const {currentUser, name, nameError, username, usernameError} = this.props;
 
     if (currentUser.get('fullName') === '') {
-      return <PickName
-        currentUser={currentUser}
-        name={name}
-        nameError={nameError} />;
+      return (
+        <PickName
+          currentUser={currentUser}
+          name={name}
+          nameError={nameError} />
+      );
     }
 
     return (

@@ -12,7 +12,13 @@ export default {
   user: ImmutablePropTypes.mapContains({
     _id: PropTypes.string.isRequired,
     createdAt: PropTypes.string.isRequired,
+    fullName: PropTypes.string.isRequired,
+    location: ImmutablePropTypes.mapContains({
+      lat: PropTypes.number.isRequired,
+      lon: PropTypes.number.isRequired
+    }).isRequired,
     email: PropTypes.string.isRequired,
-    updatedAt: PropTypes.string.isRequired
+    updatedAt: PropTypes.string.isRequired,
+    username: PropTypes.string
   })
 };

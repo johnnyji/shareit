@@ -4,12 +4,11 @@ import {
   SET_ALERT
 } from '../action_types/AppActionTypes';
 import {
-  AUTHENTICATE_SUCCESS
-} from '../action_types/AuthActionTypes';
-import {
   WRITE_NAME_SUCCESS,
   WRITE_USERNAME_SUCCESS
 } from '../action_types/OnboardingActionTypes';
+import {AUTHENTICATE_SUCCESS} from '../action_types/AuthActionTypes';
+import {FETCH_LOCATION_SUCCESS} from '../action_types/LocationFetchingActionTypes';
 import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
 
@@ -28,6 +27,8 @@ export default createReducer(initialState, {
   handlers: {
     onSetCurrentUser: [AUTHENTICATE_SUCCESS],
     onUpdateCurrentUser: [
+      // When the user's location updates
+      FETCH_LOCATION_SUCCESS,
       // Update fullName
       WRITE_NAME_SUCCESS,
       // Update username
