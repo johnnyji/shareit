@@ -59,7 +59,7 @@ export default class Root extends React.Component {
     app: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
   };
-
+  
   constructor(props) {
     super(props);
     const socket = io(API_PATH, {transports: ['websocket'], forceNew: true});

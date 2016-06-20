@@ -1,29 +1,12 @@
 import React, {
   Component,
-  PropTypes,
-  StyleSheet,
-  Text,
-  View
+  PropTypes
 } from 'react-native';
-import baseStyles from '../styles/baseStyles';
 import {connect} from 'react-redux';
-import ColorScheme from '../styles/ColorScheme';
 import CustomPropTypes from '../components/utils/CustomPropTypes';
 import FullPageError from '../components/ui/FullPageError';
-import Icon from 'react-native-vector-icons/Ionicons';
+import FullPageSpinner from '../components/ui/FullPageSpinner';
 import LocationFetchingActionCreators from '../actions/LocationFetchingActionCreators';
-
-const styles = StyleSheet.create({
-  main: {
-    flex: 1
-  },
-  fetchingIcon: {
-    color: ColorScheme.primaryLight
-  },
-  fetchingText: {
-    marginTop: 20
-  }
-});
 
 export default (ComposedComponent) => {
 
@@ -63,28 +46,9 @@ export default (ComposedComponent) => {
     }
 
     render() {
+      if (this.props.fetchError) return <FullPageError error={this.props.fetchError} />;
 
-      if (this.props.fetchError) {
-        return <FullPageError error={this.props.fetchError} />;
-      }
-
-      if (!this.props.fetched) {
-        return (
-          <View style={[styles.main, baseStyles.stretchCrossAxis]}>
-            <View style={{flex: 2}} />
-
-            <View style={[{flex: 5}, baseStyles.centerChildren]}>
-              <Icon
-                name='ios-navigate'
-                size={60}
-                style={styles.fetchingIcon} />
-              <Text style={[styles.fetchingText, baseStyles.subheader]}>Finding you...</Text>
-            </View>
-
-            <View style={{flex: 7}} />
-          </View>
-        );
-      }
+      if (!this.props.fetched) return <FullPageSpinner />;
 
       return <ComposedComponent {...this.props} />;
     }
