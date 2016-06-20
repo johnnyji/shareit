@@ -5,6 +5,7 @@ import React, {
   Text,
   View
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import baseStyles from '../../../styles/baseStyles';
 import Clickable from '../../ui/Clickable';
 import ColorScheme from '../../../styles/ColorScheme';
@@ -53,6 +54,17 @@ export default class PickUsername extends Component {
     dispatch: PropTypes.func.isRequired
   };
 
+  componentWillReceiveProps(nextProps) {
+    // If the user has finished the onboarding process, we
+    // send them to their dashboard
+    if (
+      nextProps.currentUser.has('username') &&
+      nextProps.currentUser.get('username').length > 0
+    ) {
+      Actions.Home();
+    }
+  }
+
   render() {
     const {username, usernameError} = this.props;
     const isValidUsername = username.length > 0 && !usernameError;
@@ -100,7 +112,9 @@ export default class PickUsername extends Component {
 
     app
       .service('users')
-      .patch(currentUser.get('_id'), {username})
+      // We make sure to set `onboarded` to true to indicate that
+      // the user has completed their onboarding process
+      .patch(currentUser.get('_id'), {username, onboarded: true})
       .then((user) => {
         dispatch(OnboardingActionCreators.writeUsernameSuccess(user));
       })

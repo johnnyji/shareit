@@ -4,6 +4,7 @@ import React, {
   PropTypes,
   View
 } from 'react-native';
+import AppActionCreators from '../actions/AppActionCreators';
 import AuthActionCreators from '../actions/AuthActionCreators';
 import FullPageSpinner from './ui/FullPageSpinner';
 import Home from './views/Home';
@@ -20,7 +21,6 @@ import hooks from 'feathers-hooks';
 import socketio from 'feathers-socketio/client';
 import {Router, Route} from 'react-native-router-flux';
 import {connect} from 'react-redux';
-import {onConnect, onDisconnect} from '../actions/AppActionCreators';
 
 // This is required for socket.io-client due to a bug in React Native debugger
 if (window.navigator && Object.keys(window.navigator).length === 0) {
@@ -33,10 +33,11 @@ const API_PATH = 'http://localhost:3030';
 
 @connect((state) => ({
   alert: state.app.get('alert'),
+  connected: state.app.get('connected'),
+  connecting: state.app.get('connecting'),
   currentUser: state.app.get('currentUser'),
   fetchingCurrentUser: state.auth.get('fetchingCurrentUser'),
-  fetchedCurrentUser: state.auth.get('fetchedCurrentUser'),
-  isConnected: state.app.get('isConnected')
+  fetchedCurrentUser: state.auth.get('fetchedCurrentUser')
 }))
 export default class Root extends React.Component {
 
@@ -48,11 +49,12 @@ export default class Root extends React.Component {
       message: PropTypes.string
     }).isRequired,
     app: PropTypes.any,
+    connected: PropTypes.bool.isRequired,
+    connecting: PropTypes.bool.isRequired,
     currentUser: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
     fetchingCurrentUser: PropTypes.bool.isRequired,
-    fetchedCurrentUser: PropTypes.bool.isRequired,
-    isConnected: PropTypes.bool.isRequired
+    fetchedCurrentUser: PropTypes.bool.isRequired
   };
 
   static childContextTypes = {
@@ -80,6 +82,10 @@ export default class Root extends React.Component {
     };
   }
 
+  componentWillMount() {
+    this.props.dispatch(AppActionCreators.onConnecting());
+  }
+
   componentDidMount() {
     this.app.io.on('connect', this._handleConnect);
     this.app.io.on('disconnect', this._handleDisconnect);
@@ -99,12 +105,13 @@ export default class Root extends React.Component {
 
   render() {
     const {
+      connected,
+      connecting,
       currentUser,
-      fetchingCurrentUser,
-      isConnected: clientIsConnected
+      fetchingCurrentUser
     } = this.props;
 
-    if (fetchingCurrentUser) return <FullPageSpinner />;
+    if (connecting || fetchingCurrentUser) return <FullPageSpinner />;
 
     return (
       <View style={baseStyles.fullWidth}>
@@ -112,14 +119,14 @@ export default class Root extends React.Component {
           <Route
             component={Offline}
             hideNavBar={true}
-            initial={!clientIsConnected}
+            initial={!connecting && !connected}
             name='Offline'
             title='Offline' />
 
           <Route
             component={Landing}
             hideNavBar={true}
-            initial={clientIsConnected && !currentUser}
+            initial={connected && !currentUser}
             name='Landing'
             title='Landing' />
           <Route
@@ -136,14 +143,14 @@ export default class Root extends React.Component {
           <Route
             component={Onboarding}
             hideNavBar={true}
-            initial={clientIsConnected && currentUser && !currentUser.get('onboarded')}
+            initial={connected && currentUser && !currentUser.get('onboarded')}
             name='Onboarding'
             title='Onboarding' />
 
           <Route
             component={Home}
             hideNavBar={true}
-            initial={clientIsConnected && currentUser && currentUser.get('onboarded')}
+            initial={connected && currentUser && currentUser.get('onboarded')}
             name='Home'
             title='Home' />
         </Router>
@@ -155,7 +162,7 @@ export default class Root extends React.Component {
   _handleConnect = () => {
     const {dispatch} = this.props;
 
-    dispatch(onConnect());
+    dispatch(AppActionCreators.onConnected());
     dispatch(AuthActionCreators.authenticate());
 
     // Authenticate the user
@@ -170,6 +177,6 @@ export default class Root extends React.Component {
 
   _handleDisconnect = () => {
     // Notify the store of the socket disconnection
-    this.props.dispatch(onDisconnect());
+    this.props.dispatch(AppActionCreators.onDisconnect());
   };
 }

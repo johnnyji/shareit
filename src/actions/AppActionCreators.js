@@ -1,14 +1,21 @@
 import {
-  ON_CONNECT,
+  ON_CONNECTED,
+  ON_CONNECTING,
   ON_DISCONNECT,
   SET_ALERT
 } from '../action_types/AppActionTypes';
 
 const AppActionCreators = {
 
-  onConnect() {
+  onConnecting() {
     return {
-      type: ON_CONNECT
+      type: ON_CONNECTING
+    };
+  },
+
+  onConnected() {
+    return {
+      type: ON_CONNECTED
     };
   },
 

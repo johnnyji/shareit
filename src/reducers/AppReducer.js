@@ -1,5 +1,6 @@
 import {
-  ON_CONNECT,
+  ON_CONNECTED,
+  ON_CONNECTING,
   ON_DISCONNECT,
   SET_ALERT
 } from '../action_types/AppActionTypes';
@@ -17,8 +18,9 @@ const initialState = Immutable.fromJS({
     title: null,
     message: null
   },
-  currentUser: null,
-  isConnected: false
+  connecting: false,
+  connected: false,
+  currentUser: null
 });
 
 export default createReducer(initialState, {
@@ -34,7 +36,8 @@ export default createReducer(initialState, {
       // Update username
       WRITE_USERNAME_SUCCESS
     ],
-    onServerConnect: [ON_CONNECT],
+    onServerConnecting: [ON_CONNECTING],
+    onServerConnected: [ON_CONNECTED],
     onServerDisconnect: [ON_DISCONNECT],
     onSetAlert: [SET_ALERT]
   },
@@ -47,12 +50,25 @@ export default createReducer(initialState, {
     return state.merge({currentUser: user});
   },
 
-  onServerConnect(state) {
-    return state.set('isConnected', true);
+  onServerConnected(state) {
+    return state.merge({
+      connecting: false,
+      connected: true
+    });
+  },
+
+  onServerConnecting(state) {
+    return state.merge({
+      connecting: true,
+      connected: false
+    });
   },
 
   onServerDisconnect(state) {
-    return state.set('isConnected', false);
+    return state.set({
+      connecting: false,
+      connected: false
+    });
   },
 
   onSetAlert(state, {title, message}) {
