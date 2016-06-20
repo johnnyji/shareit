@@ -18,13 +18,14 @@ export default function(initialState, opts) {
   // }
   let {handlers} = opts;
   const {name} = opts;
+  const reducerTitle = name ? `the ${name} reducer` : 'your reducer';
   
-  if (typeof name === 'undefined') {
+  if (name == null) {
     console.error('One of your reducers is missing a `name` property in its object definition.');
   }
 
-  if (typeof handlers === 'undefined') {
-    console.error(`The 'handlers' key must be present in the ${name} reducer to listen to action types`);
+  if (handlers == null) {
+    console.error(`The 'handlers' key must be present in ${reducerTitle} to listen to action types`);
     handlers = [];
   }
 
@@ -52,7 +53,7 @@ export default function(initialState, opts) {
         // If the action handler function cannot be found on the reducer object definition,
         // we return the state as/is and issue a console error to the developer
         if (typeof opts[actionHandler] !== 'function') {
-          console.error(`The '${actionHandler}' handler function doesn't exist on your reducer.`);
+          console.error(`The '${actionHandler}' handler function doesn't exist on ${reducerTitle}.`);
           return currentState;
         }
 
@@ -65,7 +66,7 @@ export default function(initialState, opts) {
           // If the new state was never returned, alert the user and instead just return the current state.
           console.error(
             `Action handlers in reducers must return the new state map (Immutable.Map). ` +
-            `Check the '${actionHandler}' handler on the ${name} reducer.`
+            `Check the '${actionHandler}' handler on ${reducerTitle}.`
           );
           return currentState;
         }
