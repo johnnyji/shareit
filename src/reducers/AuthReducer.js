@@ -67,7 +67,11 @@ export default createReducer(initialState, {
       authenticating: false,
       authenticationError: null,
       fetchingCurrentUser: false,
-      fetchedCurrentUser: true
+      fetchedCurrentUser: true,
+      // We need to set `loggedOut` to false because when
+      // we logged out, it became true, therefore if we've logged back in,
+      // `loggedOut` must once again be false
+      loggedOut: false
     });
   },
 
