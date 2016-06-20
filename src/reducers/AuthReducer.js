@@ -88,7 +88,7 @@ export default createReducer(initialState, {
   },
 
   onLogoutSuccess() {
-    return initialState;
+    return initialState.set('loggedOut', true);
   },
 
   onUpdateEmail(state, data) {

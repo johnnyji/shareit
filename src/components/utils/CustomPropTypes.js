@@ -16,7 +16,7 @@ export default {
     location: ImmutablePropTypes.mapContains({
       lat: PropTypes.number.isRequired,
       lon: PropTypes.number.isRequired
-    }).isRequired,
+    }),
     email: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
     username: PropTypes.string

@@ -5,6 +5,7 @@ import React, {
   Text,
   View
 } from 'react-native';
+import {Actions} from 'react-native-router-flux';
 import AppActionCreators from '../../../actions/AppActionCreators';
 import AuthActionCreators from '../../../actions/AuthActionCreators';
 import {connect} from 'react-redux';
@@ -57,6 +58,11 @@ export default class Home extends Component {
     // If there was an error in the logout process
     if (!this.props.logoutError && nextProps.logoutError) {
       return this.props.dispatch(AppActionCreators.setAlert(nextProps.logoutError));
+    }
+
+    // If the logout was successful
+    if (!this.props.loggedOut && nextProps.loggedOut) {
+      Actions.Landing();
     }
   }
 
