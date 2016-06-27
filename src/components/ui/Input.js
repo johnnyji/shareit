@@ -13,11 +13,18 @@ const styles = StyleSheet.create({
   main: {
     backgroundColor: 'transparent',
     color: ColorScheme.text,
-    flex: 1,
+    flex: 1
+  },
+  container: {
+    flexDirection: 'row',
+    padding: 8,
     paddingBottom: 6,
     paddingLeft: 8,
     paddingRight: 8,
     paddingTop: 6
+  },
+  rightSideContent: {
+    padding: 2
   }
 });
 
@@ -31,12 +38,18 @@ export default class Input extends Component {
     borderColor: PropTypes.string.isRequired,
     borderWidth: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    onSubmit: PropTypes.func,
     onUpdate: PropTypes.func.isRequired,
     placeholder: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.node
     ]).isRequired,
     placeholderTextColor: PropTypes.string.isRequired,
+    returnKeyType: PropTypes.oneOf([
+      'done', 'go', 'next', 'search', 'send', 'none', 'previous',
+      'default', 'emergency-call', 'google', 'join', 'route', 'yahoo'
+    ]).isRequired,
+    rightSideContent: PropTypes.node,
     showBorderBottom: PropTypes.bool.isRequired,
     showBorderTop: PropTypes.bool.isRequired,
     style: CustomPropTypes.style,
@@ -50,6 +63,7 @@ export default class Input extends Component {
     borderWidth: 1,
     height: 45,
     placeholderTextColor: ColorScheme.placeholder,
+    returnKeyType: 'default',
     showBorderBottom: true,
     showBorderTop: false,
     type: 'text',
@@ -62,8 +76,11 @@ export default class Input extends Component {
       borderColor,
       borderWidth,
       height,
+      onSubmit,
       placeholder,
       placeholderTextColor,
+      returnKeyType,
+      rightSideContent,
       showBorderBottom,
       showBorderTop,
       style,
@@ -73,6 +90,7 @@ export default class Input extends Component {
 
     return (
       <View style={[
+        styles.container,
         {height},
         showBorderTop && {
           borderTopColor: borderColor,
@@ -86,14 +104,21 @@ export default class Input extends Component {
         <TextInput
           autoFocus={autoFocus}
           onChangeText={this._handleChangeText}
+          onSubmitEditing={onSubmit || null}
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor}
           value={value}
+          returnKeyType={returnKeyType}
           secureTextEntry={type === 'password'}
           style={[
             styles.main,
             style && style
           ]} />
+          {rightSideContent &&
+            React.cloneElement(rightSideContent, {
+              style: [rightSideContent.props.style, styles.rightSideContent]
+            })
+          }
       </View>
     );
   }
