@@ -68,18 +68,13 @@ export default class Register extends Component {
 
         <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
           <Input
-            borderBottomColor={ColorScheme.borderGray}
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
-            placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 60}}
             value={this.props.email} />
           <Input
-            borderBottomColor={ColorScheme.borderGray}
+            height={60}
             onUpdate={this._handleUpdatePassword}
             placeholder='Password'
-            placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 60}}
             type='password'
             value={this.props.password} />
         </View>

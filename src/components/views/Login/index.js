@@ -7,7 +7,6 @@ import React, {
 import AuthActionCreators from '../../../actions/AuthActionCreators';
 import baseStyles from '../../../styles/baseStyles';
 import Button from '../../ui/Button';
-import ColorScheme from '../../../styles/ColorScheme';
 import CustomPropTypes from '../../utils/CustomPropTypes';
 import getResponseErrors from '../../../utils/http/getResponseErrors';
 import Input from '../../ui/Input';
@@ -72,18 +71,14 @@ export default class Login extends Component {
 
         <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
           <Input
-            borderBottomColor={ColorScheme.borderGray}
+            height={60}
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
-            placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 60}}
             value={this.props.email} />
           <Input
-            borderBottomColor={ColorScheme.borderGray}
+            height={60}
             onUpdate={this._handleUpdatePassword}
             placeholder='Password'
-            placeholderTextColor={ColorScheme.placeholder}
-            style={{height: 60}}
             type='password'
             value={this.props.password} />
         </View>

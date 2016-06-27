@@ -24,57 +24,60 @@ export default (ComposedComponent) => {
     static propTypes = {
       currentUser: CustomPropTypes.user.isRequired,
       dispatch: PropTypes.func.isRequired,
-      fetchedMessages: PropTypes.bool.isRequired,
-      fetchingMessages: PropTypes.bool.isRequired,
-      fetchMessagesError: PropTypes.bool,
+      fetchError: PropTypes.string,
+      fetched: PropTypes.bool.isRequired,
+      fetching: PropTypes.bool.isRequired,
       messages: ImmutablePropTypes.list,
       messagesListViewData: PropTypes.instanceOf(ListView.DataSource).isRequired
     };
 
-    componentDidMount() {
-      if (!this.props.fetchingMessages && !this.props.fetchedMessages) {
+    componentWillMount() {
+      if (!this.props.fetching && !this.props.fetched) {
         this._fetchMessages();
       }
     }
 
     render() {
       const {
-        fetchingMessages,
-        fetchedMessages,
-        fetchMessagesError,
+        fetching,
+        fetched,
+        fetchError,
         ...restProps
       } = this.props;
 
-      if (fetchingMessages && !fetchedMessages) return <FullPageSpinner />;
-      if (fetchedMessages && fetchMessagesError) return <FullPageError error={fetchMessagesError} />;
+      if (fetchError) return <FullPageError error={fetchError} />;
+      if (fetching || !fetched) return <FullPageSpinner />;
         
       return <ComposedComponent {...restProps} />;
     }
     
     _fetchMessages = () => {
       const {currentUser, dispatch} = this.props;
+      const nearbyMessages = withinDistance.miles(
+        50,
+        currentUser.getIn(['location', 'lat']),
+        currentUser.getIn(['location', 'lon'])
+      );
+
+      dispatch(MessagesActionCreators.fetch());
 
       this.context.app
         .service('messages')
-        .find(withinDistance.miles(
-          50,
-          currentUser.getIn(['location', 'lat']),
-          currentUser.getIn(['location', 'lon'])
-        ))
+        .find(nearbyMessages)
         .then((response) => {
           dispatch(MessagesActionCreators.fetchSuccess(response));
         })
-        .catch(({message}) => {
-          dispatch(MessagesActionCreators.fetchError(message));
+        .catch((err) => {
+          dispatch(MessagesActionCreators.fetchError(err.message));
         });
     };
 
   }
 
   return connect((state) => ({
-    fetchMessagesError: state.messagesFetching.get('fetchError'),
-    fetchedMessages: state.messagesFetching.get('fetched'),
-    fetchingMessages: state.messagesFetching.get('fetching'),
+    fetchError: state.messagesFetching.get('fetchError'),
+    fetched: state.messagesFetching.get('fetched'),
+    fetching: state.messagesFetching.get('fetching'),
     messages: state.messages.get('messages'),
     messagesListViewData: state.messages.get('messagesListViewData')
   }))(RequiresNearbyMessages);

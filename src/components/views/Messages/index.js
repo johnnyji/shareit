@@ -12,6 +12,7 @@ import AuthActionCreators from '../../../actions/AuthActionCreators';
 import {connect} from 'react-redux';
 import Clickable from '../../ui/Clickable';
 import CustomPropTypes from '../../utils/CustomPropTypes';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import MessagesContainer from './MessagesContainer';
 import pureRender from 'pure-render-decorator';
 import RequiresCurrentUser from '../../../containers/RequiresCurrentUser';
@@ -20,6 +21,9 @@ import Toolbar from '../../ui/Toolbar';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 
 const styles = StyleSheet.create({
+  main: {
+    flex: 1
+  },
   mainText: {
     fontSize: 18,
     fontWeight: 'bold'
@@ -51,6 +55,7 @@ export default class Messages extends Component {
     loggingOut: PropTypes.bool.isRequired,
     loggedOut: PropTypes.bool.isRequired,
     logoutError: PropTypes.string,
+    messages: ImmutablePropTypes.list.isRequired,
     messagesListViewData: PropTypes.instanceOf(ListView.DataSource).isRequired
   };
 
@@ -69,11 +74,12 @@ export default class Messages extends Component {
   render() {
     const {
       currentUser,
+      messages,
       messagesListViewData
     } = this.props;
 
     return (
-      <View>
+      <View style={styles.main}>
         <StatusBarEscape />
         <Toolbar>
           <Clickable onClick={this._handleLogout} style={styles.logoutLink}>
@@ -81,6 +87,7 @@ export default class Messages extends Component {
           </Clickable>
         </Toolbar>
         <MessagesContainer
+          messages={messages}
           currentUser={currentUser}
           messagesListViewData={messagesListViewData} />
       </View>

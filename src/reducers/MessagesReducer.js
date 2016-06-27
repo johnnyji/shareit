@@ -30,7 +30,7 @@ export default createReducer(initialState, {
     });
 
     // Update the messages offset fetch count
-    newState = newState.update('offset', offset);
+    newState = newState.set('offset', offset);
 
     // Updates the ListView rows with the new messages
     newState = newState.update('messagesListViewData', (data) => {

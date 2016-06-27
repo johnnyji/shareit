@@ -28,8 +28,8 @@ export default class Input extends Component {
 
   static propTypes = {
     autoFocus: PropTypes.bool.isRequired,
-    borderBottomColor: PropTypes.string.isRequired,
-    borderBottomWidth: PropTypes.number.isRequired,
+    borderColor: PropTypes.string.isRequired,
+    borderWidth: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     onUpdate: PropTypes.func.isRequired,
     placeholder: PropTypes.oneOfType([
@@ -38,6 +38,7 @@ export default class Input extends Component {
     ]).isRequired,
     placeholderTextColor: PropTypes.string.isRequired,
     showBorderBottom: PropTypes.bool.isRequired,
+    showBorderTop: PropTypes.bool.isRequired,
     style: CustomPropTypes.style,
     type: PropTypes.oneOf(['text', 'password']).isRequired,
     value: PropTypes.string.isRequired
@@ -45,11 +46,12 @@ export default class Input extends Component {
 
   static defaultProps = {
     autoFocus: false,
-    borderBottomColor: ColorScheme.borderGray,
-    borderBottomWidth: 1,
+    borderColor: ColorScheme.borderGray,
+    borderWidth: 1,
     height: 45,
     placeholderTextColor: ColorScheme.placeholder,
     showBorderBottom: true,
+    showBorderTop: false,
     type: 'text',
     value: ''
   };
@@ -57,12 +59,13 @@ export default class Input extends Component {
   render() {
     const {
       autoFocus,
-      borderBottomColor,
-      borderBottomWidth,
+      borderColor,
+      borderWidth,
       height,
       placeholder,
       placeholderTextColor,
       showBorderBottom,
+      showBorderTop,
       style,
       type,
       value
@@ -71,9 +74,13 @@ export default class Input extends Component {
     return (
       <View style={[
         {height},
+        showBorderTop && {
+          borderTopColor: borderColor,
+          borderTopWidth: borderWidth
+        },
         showBorderBottom && {
-          borderBottomColor,
-          borderBottomWidth
+          borderBottomColor: borderColor,
+          borderBottomWidth: borderWidth
         }
       ]}>
         <TextInput
