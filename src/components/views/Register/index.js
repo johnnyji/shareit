@@ -68,6 +68,7 @@ export default class Register extends Component {
 
         <View style={[baseStyles.stretchCrossAxis, {flex: 8}]}>
           <Input
+            height={60}
             onUpdate={this._handleUpdateEmail}
             placeholder='Email'
             value={this.props.email} />
