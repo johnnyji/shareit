@@ -9,6 +9,9 @@ const config = {
     clientId: 'YOUR_INSTAGRAM_ID',
     clientSecret: 'YOUR_INSTAGRAM_SECRET',
     redirectUri: 'shareit://auth/instagram/callback'
+  },
+  googleMaps: {
+    apiKey: 'YOUR_API_KEY'
   }
 };
 

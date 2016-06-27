@@ -7,7 +7,7 @@ import React, {
 import AppActionCreators from '../actions/AppActionCreators';
 import AuthActionCreators from '../actions/AuthActionCreators';
 import FullPageSpinner from './ui/FullPageSpinner';
-import Home from './views/Home';
+import Messages from './views/Messages';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Landing from './views/Landing';
 import Login from './views/Login';
@@ -148,11 +148,11 @@ export default class Root extends React.Component {
             title='Onboarding' />
 
           <Route
-            component={Home}
+            component={Messages}
             hideNavBar={true}
             initial={connected && currentUser && currentUser.get('onboarded')}
-            name='Home'
-            title='Home' />
+            name='Messages'
+            title='Messages' />
         </Router>
       </View>
     );

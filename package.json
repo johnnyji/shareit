@@ -13,12 +13,15 @@
     "feathers-authentication": "0.7.7",
     "feathers-hooks": "1.5.4",
     "feathers-socketio": "1.4.1",
+    "geopoint": "^1.0.1",
+    "google-maps": "^3.2.1",
     "immutable": "3.8.1",
     "lodash": "4.12.0",
     "pure-render-decorator": "1.1.1",
     "react-native": "=0.21.0",
     "react-native-cookies": "^1.0.0",
     "react-native-fbsdk": "^0.2.1",
+    "react-native-invertible-scroll-view": "^1.0.0",
     "react-native-router-flux": "2.3.1",
     "react-native-vector-icons": "^2.0.3",
     "react-redux": "4.4.5",
@@ -36,6 +39,7 @@
     "eslint-config-johnnyji": "0.1.6",
     "eslint-plugin-babel": "3.2.0",
     "eslint-plugin-react": "5.1.1",
+    "google-maps": "^3.2.1",
     "react-immutable-proptypes": "1.7.1",
     "redux-logger": "2.6.1"
   }

@@ -15,28 +15,22 @@ export default (ComposedComponent) => {
 
     static propTypes = {
       currentUser: CustomPropTypes.user.isRequired,
+      dispatch: PropTypes.func.isRequired,
       fetchError: PropTypes.string,
       fetched: PropTypes.bool.isRequired,
       fetching: PropTypes.bool.isRequired
     };
 
-    state = {
-      locationFetched: false
-    };
-
     static contextTypes = {
-      app: PropTypes.object.isRequired,
-      dispatch: PropTypes.func.isRequired
+      app: PropTypes.object.isRequired
     };
-
-    componentWillMount() {
-      if (!this.props.fetching && !this.props.fetched) {
-        this.context.dispatch(LocationFetchingActionCreators.fetch());
-      }
-    }
 
     componentDidMount() {
-      if (!this.props.fetched) {
+      const {dispatch, fetching, fetched} = this.props;
+
+      if (!fetching && !fetched) {
+        dispatch(LocationFetchingActionCreators.fetch());
+
         navigator.geolocation.getCurrentPosition(
           this._handleLocation,
           this._handleLocationError,
@@ -46,19 +40,19 @@ export default (ComposedComponent) => {
     }
 
     render() {
-      if (this.props.fetchError) return <FullPageError error={this.props.fetchError} />;
+      const {fetching, fetched, fetchError, ...restProps} = this.props;
 
-      if (!this.props.fetched) return <FullPageSpinner />;
+      if (fetched && fetchError) return <FullPageError error={fetchError} />;
+      if (fetching) return <FullPageSpinner />;
 
-      return <ComposedComponent {...this.props} />;
+      return <ComposedComponent {...restProps} />;
     }
 
     _handleLocation = ({coords}) => {
-      const {app, dispatch} = this.context;
-      const {currentUser} = this.props;
+      const {currentUser, dispatch} = this.props;
 
       // Updates the user's latitude and longitude
-      app
+      this.context.app
         .service('users')
         .patch(currentUser.get('_id'), {
           location: {
@@ -75,7 +69,7 @@ export default (ComposedComponent) => {
     };
 
     _handleLocationError = () => {
-      this.context.dispatch(
+      this.props.dispatch(
         LocationFetchingActionCreators.fetchError('Sorry, we couldnt grab your location...')
       );
     };

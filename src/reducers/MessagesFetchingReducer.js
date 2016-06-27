@@ -1,8 +1,8 @@
 import {
-  FETCH_LOCATION,
-  FETCH_LOCATION_ERROR,
-  FETCH_LOCATION_SUCCESS
-} from '../action_types/LocationFetchingActionTypes';
+  FETCH_MESSAGES,
+  FETCH_MESSAGES_ERROR,
+  FETCH_MESSAGES_SUCCESS
+} from '../action_types/MessagesActionTypes';
 import createReducer from './utils/createReducer';
 import Immutable from 'immutable';
 
@@ -13,12 +13,12 @@ const initialState = Immutable.fromJS({
 });
 
 export default createReducer(initialState, {
-  name: 'LocationFetching',
+  name: 'MessagesFetching',
   
   handlers: {
-    onFetching: [FETCH_LOCATION],
-    onFetched: [FETCH_LOCATION_SUCCESS],
-    onFetchError: [FETCH_LOCATION_ERROR]
+    onFetching: [FETCH_MESSAGES],
+    onFetched: [FETCH_MESSAGES_SUCCESS],
+    onFetchError: [FETCH_MESSAGES_ERROR]
   },
 
   onFetching(state) {

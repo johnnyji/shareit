@@ -61,7 +61,7 @@ export default class PickUsername extends Component {
       nextProps.currentUser.has('username') &&
       nextProps.currentUser.get('username').length > 0
     ) {
-      Actions.Home();
+      Actions.Messages();
     }
   }
 

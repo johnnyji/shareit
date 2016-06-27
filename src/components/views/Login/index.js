@@ -51,14 +51,13 @@ export default class Login extends Component {
       // If the user has not been onboarded fully,
       // we need to step them through the unboarding screen
       if (!currentUser.get('onboarded')) {
-        console.log('User is not onboarded... So we want to onboard them');
         Actions.Onboarding();
         return;
       }
 
       // Otherwise if the user has already been onboarded, we
       // just follow the regular flow
-      Actions.Home();
+      Actions.Messages();
     }
   }
 

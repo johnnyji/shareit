@@ -1,5 +1,6 @@
 import React, {
   Component,
+  ListView,
   PropTypes,
   StyleSheet,
   Text,
@@ -11,17 +12,14 @@ import AuthActionCreators from '../../../actions/AuthActionCreators';
 import {connect} from 'react-redux';
 import Clickable from '../../ui/Clickable';
 import CustomPropTypes from '../../utils/CustomPropTypes';
+import MessagesContainer from './MessagesContainer';
 import pureRender from 'pure-render-decorator';
 import RequiresCurrentUser from '../../../containers/RequiresCurrentUser';
+import RequiresNearbyMessages from '../../../containers/RequiresNearbyMessages';
 import Toolbar from '../../ui/Toolbar';
 import StatusBarEscape from '../../ui/StatusBarEscape';
 
 const styles = StyleSheet.create({
-  content: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center'
-  },
   mainText: {
     fontSize: 18,
     fontWeight: 'bold'
@@ -37,10 +35,11 @@ const styles = StyleSheet.create({
   logoutError: state.auth.get('logoutError')
 }))
 @RequiresCurrentUser
+@RequiresNearbyMessages
 @pureRender
-export default class Home extends Component {
+export default class Messages extends Component {
 
-  static displayName = 'Home';
+  static displayName = 'Messages';
   
   static contextTypes = {
     app: PropTypes.object.isRequired
@@ -51,7 +50,8 @@ export default class Home extends Component {
     dispatch: PropTypes.func.isRequired,
     loggingOut: PropTypes.bool.isRequired,
     loggedOut: PropTypes.bool.isRequired,
-    logoutError: PropTypes.string
+    logoutError: PropTypes.string,
+    messagesListViewData: PropTypes.instanceOf(ListView.DataSource).isRequired
   };
 
   componentWillReceiveProps(nextProps) {
@@ -67,9 +67,11 @@ export default class Home extends Component {
   }
 
   render() {
-    const {currentUser} = this.props;
+    const {
+      currentUser,
+      messagesListViewData
+    } = this.props;
 
-    // Have an input field like: 'Hello __Your Name__'
     return (
       <View>
         <StatusBarEscape />
@@ -78,10 +80,9 @@ export default class Home extends Component {
             <Text>Logout</Text>
           </Clickable>
         </Toolbar>
-
-        <View style={styles.content}>
-          <Text style={styles.mainText}>Hello {currentUser.get('email')}</Text>
-        </View>
+        <MessagesContainer
+          currentUser={currentUser}
+          messagesListViewData={messagesListViewData} />
       </View>
     );
   }
